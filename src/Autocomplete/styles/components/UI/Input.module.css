@@ -1,0 +1,87 @@
+.input {
+  height: 3rem;
+  width: 100%;
+  outline: none;
+  padding: 14px;
+  padding-right: 65px;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.00938em;
+  border-radius: 4px;
+  outline: 1px solid rgba(0, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.input:hover {
+  border-color: rgba(0, 0, 0, 0.87);
+}
+
+.input:focus {
+  border: 1px solid #2196f3;
+  outline: 1px solid #2196f3;
+}
+
+.label {
+  background-color: #ffffff;
+  padding: 0px 5px;
+  position: absolute;
+  top: 15px;
+  left: 14px;
+  z-index: 2;
+  color: rgba(0, 0, 0, 0.5);
+  transition: 0.14s ease-in;
+  transition-property: top, font-size;
+}
+
+.input:focus + .label {
+  color: #2196f3;
+  top: -8px;
+  left: 14px;
+  font-size: 0.75rem;
+}
+
+.input:not(:placeholder-shown) + .label {
+  top: -8px;
+  left: 14px;
+  font-size: 0.75rem;
+}
+
+.input::placeholder {
+  opacity: 0;
+}
+
+
+.close_btn_icon,
+.drop_btn_icon {
+  fill: rgba(0, 0, 0, 0.5);
+}
+
+.close_btn {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: 6px;
+  right: 36px;
+  z-index: 2;
+}
+
+.input:not(:placeholder-shown) ~ .close_btn {
+  display: block;
+}
+
+.input:placeholder-shown ~ .close_btn {
+  display: none;
+}
+
+.drop_btn {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: 6px;
+  right: 4px;
+  z-index: 2;
+}
+
+.drop_btn_icon._reverse {
+  transform: rotateX(0.5turn);
+}

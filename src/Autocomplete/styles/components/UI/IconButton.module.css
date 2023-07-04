@@ -1,0 +1,30 @@
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  outline: 0;
+  border: none;
+  padding: 5px;
+  transition: 0.25s ease-in;
+}
+
+.btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.btn:active {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+._disable {
+  pointer-events: none;
+  cursor: default;
+}
+
+._disable svg {
+  fill: rgba(0, 0, 0, 0.3);;
+}

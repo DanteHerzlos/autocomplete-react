@@ -1,0 +1,41 @@
+.filteredList._hide {
+  display: none;
+}
+
+.filteredList {
+  padding: 5px 0;
+  user-select: none;
+  position: absolute;
+  background-color: #ffffff;
+  width: 100%;
+  top: 3.25rem;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 4px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.option {
+  cursor: pointer;
+  padding: 7px 14px;
+}
+
+.option._hover {
+  background-color: #eeeeee;
+}
+
+.option._selected {
+  background-color: #3b82f680;
+}
+
+.option._disabled{
+  color: #cccccc;
+  pointer-events: none;
+}
+
+.noOptions {
+  padding: 7px 14px;
+  cursor: auto;
+  color: rgba(0, 0, 0, 0.5);
+}
