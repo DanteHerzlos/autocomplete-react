@@ -19,7 +19,7 @@ interface ListProps {
   selectedOption: OptionType | null;
   visible: boolean;
   noOptionMessage: string;
-  inputRef: RefObject<InputRef>
+  inputRef: RefObject<InputRef>;
 }
 
 export interface ListRef {
@@ -29,10 +29,7 @@ export interface ListRef {
 }
 
 const List = forwardRef<ListRef, ListProps>(
-  (
-    { options, selectedOption, visible, noOptionMessage, inputRef },
-    ref
-  ) => {
+  ({ options, selectedOption, visible, noOptionMessage, inputRef }, ref) => {
     const [hoveredOption, setHoveredOption] = useState<OptionType>(options[0]);
     const [hoveredIndex, setHoveredIndex] = useState<number>(0);
     const optionsRef = useRef<HTMLParagraphElement[] | null[]>([]);

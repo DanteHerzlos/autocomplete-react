@@ -9,6 +9,7 @@ import { ListRef } from "./List";
 interface InputProps {
   onChange?: (event: OptionType | null) => void;
   setSelectedOption: (option: OptionType | null) => void;
+  selectedOption: OptionType | null;
   setIsFilteredList: (visible: boolean) => void;
   isFilteredList: boolean;
   filteredList: OptionType[];
@@ -29,6 +30,7 @@ const Input = forwardRef<InputRef, InputProps>(
       label,
       onChange,
       setSelectedOption,
+      selectedOption,
       setIsFilteredList,
       isFilteredList,
       filteredList,
@@ -47,12 +49,12 @@ const Input = forwardRef<InputRef, InputProps>(
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       setIsFilteredList(true);
-      const newList = options.filter((el) =>
-        new RegExp(
-          e.currentTarget.value.replace(/[/\-\\^$*+?.()|[\]{}]/g, "\\$&"),
-          "i"
-        ).test(el.label)
-      );
+      const newList = [];
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].label.includes(e.currentTarget.value)) {
+          newList.push(options[i]);
+        }
+      }
       setFilteredList(newList);
     };
 
@@ -65,18 +67,21 @@ const Input = forwardRef<InputRef, InputProps>(
     };
 
     const blurHandler = () => {
-      const inputValue = inputRef.current?.value;
-      if (options.filter((el) => inputValue === el.label).length !== 1) {
+      if (selectedOption === null) {
         inputRef.current!.value = "";
         setFilteredList(options);
+      } else {
+        inputRef.current!.value = selectedOption.label;
+        setFilteredList(
+          options.filter((el) => selectedOption.label == el.label)
+        );
       }
       setIsFilteredList(false);
     };
 
-    const clearHandler = (e: any) => {
+    const clearHandler = () => {
       inputRef.current!.focus();
       inputRef.current!.value = "";
-      e.currentTarget!.value = "";
       setFilteredList(options);
       setSelectedOption(null);
       if (onChange) onChange(null);
@@ -96,6 +101,7 @@ const Input = forwardRef<InputRef, InputProps>(
         optionsRef.current!.nextHover();
       }
       if (e.key === "Enter") {
+        if (filteredList.filter((el) => !el.isDisabled).length === 0) return;
         selectHandler(optionsRef.current!.getHovered());
       }
     };

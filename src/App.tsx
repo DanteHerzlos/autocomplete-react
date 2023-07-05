@@ -1,8 +1,9 @@
+import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import "./App.css";
-import Autocomplete, { OptionType } from "./Autocomplete";
+import Autocomplete from "./Autocomplete";
 
 const el: OptionType[] = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 1000; i++) {
   el.push({
     label: "element " + i,
     value: i.toString(),

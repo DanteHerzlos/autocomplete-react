@@ -1,8 +1,5 @@
 import { useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
-import IconButton from "./UI/IconButton";
-import CloseIcon from "./icons/CloseIcon";
-import ArrowDropDownIcon from "./icons/ArrowDropDownIcon";
 import List, { ListRef } from "./UI/List";
 import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
@@ -36,6 +33,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           isFilteredList={isFilteredList}
           setIsFilteredList={setIsFilteredList}
           setSelectedOption={setSelectedOption}
+          selectedOption={selectedOption}
           label={label}
           options={options}
           optionsRef={optionsRef}
