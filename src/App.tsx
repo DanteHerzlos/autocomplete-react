@@ -2,9 +2,12 @@ import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import "./App.css";
 import Autocomplete from "./Autocomplete";
 import Select from "react-select";
+import VirtualAutocomplete from "Autocomplete/components/VirtualAutocomplete";
+import TextField from "@mui/material/TextField";
+import MuiAutocomplete from "@mui/material/Autocomplete";
 
 const el: OptionType[] = [];
-for (let i = 0; i < 10000; i++) {
+for (let i = 0; i < 100000; i++) {
   el.push({
     label: "element " + i,
     value: i.toString(),
@@ -23,8 +26,14 @@ const App = () => {
         justifyContent: "center",
       }}
     >
-      <Autocomplete label="elements" options={el} />
+      <VirtualAutocomplete label="elements" options={el} />
       <Select options={el} />
+      <MuiAutocomplete
+        id="combo-box-demo"
+        options={el}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Movie" />}
+      />
     </div>
   );
 };

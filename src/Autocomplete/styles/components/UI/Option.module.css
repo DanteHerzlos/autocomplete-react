@@ -1,0 +1,19 @@
+.option {
+  cursor: pointer;
+  padding: 7px 14px;
+  display: flex;
+  align-items: center;
+}
+
+.option._hover {
+  background-color: #eeeeee;
+}
+
+.option._selected {
+  background-color: #3b82f680;
+}
+
+.option._disabled{
+  color: #cccccc;
+  pointer-events: none;
+}
