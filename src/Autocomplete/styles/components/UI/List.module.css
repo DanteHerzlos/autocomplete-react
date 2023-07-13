@@ -16,6 +16,11 @@
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
+.filteredList._disable{
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .option {
   cursor: pointer;
   padding: 7px 14px;

@@ -20,6 +20,7 @@ interface ListProps {
   visible: boolean;
   noOptionMessage: string;
   inputRef: RefObject<InputRef>;
+  isDefOptions: boolean;
 }
 
 export interface ListRef {
@@ -29,43 +30,58 @@ export interface ListRef {
 }
 
 const List = forwardRef<ListRef, ListProps>(
-  ({ options, selectedOption, visible, noOptionMessage, inputRef }, ref) => {
-    const [hoveredOption, setHoveredOption] = useState<OptionType>(options[0]);
-    const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+  (
+    {
+      options,
+      isDefOptions,
+      selectedOption,
+      visible,
+      noOptionMessage,
+      inputRef,
+    },
+    ref,
+  ) => {
+    const [hoveredOption, setHoveredOption] = useState<{
+      option: OptionType;
+      index: number;
+    }>({ option: options[0], index: 0 });
     const optionsRef = useRef<HTMLParagraphElement[] | null[]>([]);
 
     useEffect(() => {
       const firstEnabled = options.findIndex((el) => !el.isDisabled);
       if (firstEnabled !== -1) {
-        setHoveredIndex(firstEnabled);
-        setHoveredOption(options[firstEnabled]);
+        setHoveredOption({
+          option: options[firstEnabled],
+          index: firstEnabled,
+        });
       }
     }, [options]);
 
     useImperativeHandle(ref, () => ({
       prevHover() {
-        const prevIndex = getPrevOptionIndex(options, hoveredIndex);
+        const prevIndex = getPrevOptionIndex(options, hoveredOption.index);
         if (prevIndex === -1) return;
         optionsRef.current[prevIndex]!.scrollIntoView({ block: "nearest" });
-        setHoveredOption(options[prevIndex]);
-        setHoveredIndex(prevIndex);
+        setHoveredOption({ option: options[prevIndex], index: prevIndex });
       },
       nextHover() {
-        const nextIndex = getNextOptionIndex(options, hoveredIndex);
+        const nextIndex = getNextOptionIndex(options, hoveredOption.index);
         if (nextIndex === -1) return;
         optionsRef.current[nextIndex]!.scrollIntoView({ block: "nearest" });
-        setHoveredOption(options[nextIndex]);
-        setHoveredIndex(nextIndex);
+        setHoveredOption({ option: options[nextIndex], index: nextIndex });
       },
       getHovered() {
-        return hoveredOption;
+        return hoveredOption.option;
       },
     }));
 
     const mouseOptionHover = (option: OptionType, index: number) => {
-      setHoveredOption(option);
-      setHoveredIndex(index);
+      setHoveredOption({ option, index });
     };
+
+    let listStyle = "default";
+    if (visible && isDefOptions) listStyle = "disabled";
+    if (!visible) listStyle = "hide";
 
     return (
       <div
@@ -74,7 +90,8 @@ const List = forwardRef<ListRef, ListProps>(
           {
             default: cl.filteredList,
             hide: [cl.filteredList, cl._hide].join(" "),
-          }[visible ? "default" : "hide"]
+            disabled: [cl.filteredList, cl._disable].join(" "),
+          }[listStyle]
         }
       >
         {options.length !== 0 ? (
@@ -84,7 +101,7 @@ const List = forwardRef<ListRef, ListProps>(
               optionStyle = "disabled";
             } else if (selectedOption && selectedOption.label === el.label) {
               optionStyle = "selected";
-            } else if (hoveredOption.label === el.label) {
+            } else if (hoveredOption.option.label === el.label) {
               optionStyle = "hovered";
             }
             return (
@@ -111,7 +128,7 @@ const List = forwardRef<ListRef, ListProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 export default List;

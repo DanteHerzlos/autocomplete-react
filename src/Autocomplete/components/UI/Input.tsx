@@ -7,6 +7,7 @@ import cl from "../../styles/components/UI/Input.module.css";
 import { ListRef } from "./List";
 
 interface InputProps {
+  onChangeInput?: (event: string) => void;
   onChange?: (event: OptionType | null) => void;
   setSelectedOption: (option: OptionType | null) => void;
   selectedOption: OptionType | null;
@@ -29,6 +30,7 @@ const Input = forwardRef<InputRef, InputProps>(
       options,
       label,
       onChange,
+      onChangeInput,
       setSelectedOption,
       selectedOption,
       setIsFilteredList,
@@ -37,7 +39,7 @@ const Input = forwardRef<InputRef, InputProps>(
       setFilteredList,
       optionsRef,
     },
-    ref
+    ref,
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,6 +50,7 @@ const Input = forwardRef<InputRef, InputProps>(
     }));
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (onChangeInput) onChangeInput(e.currentTarget.value);
       setIsFilteredList(true);
       const newList = [];
       for (let i = 0; i < options.length; i++) {
@@ -61,6 +64,7 @@ const Input = forwardRef<InputRef, InputProps>(
     const selectHandler = (el: OptionType) => {
       if (el.isDisabled) return;
       if (onChange) onChange(el);
+      if (onChangeInput) onChangeInput(el.label);
       inputRef.current!.value = el.label;
       setSelectedOption(el);
       setIsFilteredList(false);
@@ -69,12 +73,18 @@ const Input = forwardRef<InputRef, InputProps>(
     const blurHandler = () => {
       if (selectedOption === null) {
         inputRef.current!.value = "";
+        if (onChangeInput) onChangeInput("");
         setFilteredList(options);
       } else {
         inputRef.current!.value = selectedOption.label;
-        setFilteredList(
-          options.filter((el) => selectedOption.label == el.label)
-        );
+        if (onChangeInput) onChangeInput(selectedOption.label);
+        const newList = [];
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].label === selectedOption.label) {
+            newList.push(options[i]);
+          }
+        }
+        setFilteredList(newList);
       }
       setIsFilteredList(false);
     };
@@ -84,6 +94,7 @@ const Input = forwardRef<InputRef, InputProps>(
       inputRef.current!.value = "";
       setFilteredList(options);
       setSelectedOption(null);
+      if (onChangeInput) onChangeInput("");
       if (onChange) onChange(null);
     };
 
@@ -93,7 +104,11 @@ const Input = forwardRef<InputRef, InputProps>(
     };
 
     const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (!isFilteredList || filteredList.length === 0) return;
+      if (
+        !isFilteredList ||
+        filteredList.filter((el) => !el.isDisabled).length === 0
+      )
+        return;
       if (e.key === "ArrowUp") {
         optionsRef.current!.prevHover();
       }
@@ -101,7 +116,6 @@ const Input = forwardRef<InputRef, InputProps>(
         optionsRef.current!.nextHover();
       }
       if (e.key === "Enter") {
-        if (filteredList.filter((el) => !el.isDisabled).length === 0) return;
         selectHandler(optionsRef.current!.getHovered());
       }
     };
@@ -143,7 +157,7 @@ const Input = forwardRef<InputRef, InputProps>(
         </IconButton>
       </>
     );
-  }
+  },
 );
 
 export default Input;
