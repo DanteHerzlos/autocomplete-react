@@ -80,7 +80,7 @@ const Input = forwardRef<InputRef, InputProps>(
         if (onChangeInput) onChangeInput(selectedOption.label);
         const newList = [];
         for (let i = 0; i < options.length; i++) {
-          if (options[i].label === selectedOption.label) {
+          if (options[i].label.includes(selectedOption.label)) {
             newList.push(options[i]);
           }
         }
