@@ -14,7 +14,7 @@ import {
 } from "Autocomplete/utils/getNextIndex";
 import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import { InputRef } from "./Input";
-import Option from "./Option";
+import { Option } from "./Option";
 
 interface VirtualListProps {
   optionHi?: number;
@@ -47,14 +47,16 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
     },
     ref,
   ) => {
-    const renderEl = Math.ceil(listHi / optionHi) + 8;
-    const arr = new Array(renderEl).fill(0);
-
     const [hoveredOption, setHoveredOption] = useState<{
       option: OptionType;
       index: number;
     }>({ option: options[0], index: 0 });
+
+    //Virtual props
     const [start, setStart] = useState(0);
+    const renderEl = Math.ceil(listHi / optionHi) + 8;
+    const arr = new Array(renderEl).fill(0);
+    const listRef = useRef<HTMLParagraphElement>(null);
 
     const onScrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
       const top = e.currentTarget.scrollTop;
@@ -63,9 +65,9 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
       );
       if (start !== startEl) setStart(startEl);
     };
+    ////////////////////////
 
     const optionsRef = useRef<HTMLParagraphElement[] | null[]>([]);
-    const listRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
       const firstEnabled = options.findIndex((el) => !el.isDisabled);
@@ -82,11 +84,8 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
         const prevIndex = getPrevOptionIndex(options, hoveredOption.index);
         if (prevIndex === -1) return;
         const prevScrollPos = prevIndex * optionHi - 5;
-        if (
-          listRef.current &&
-          (listRef.current.scrollTop > prevScrollPos ||
-            listRef.current.scrollTop + listHi < prevScrollPos)
-        ) {
+        const scrollTop = listRef.current!.scrollTop;
+        if (scrollTop > prevScrollPos || scrollTop + listHi < prevScrollPos) {
           listRef.current?.scrollTo(0, prevScrollPos);
         }
         setHoveredOption({ option: options[prevIndex], index: prevIndex });
@@ -95,12 +94,9 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
         const nextIndex = getNextOptionIndex(options, hoveredOption.index);
         if (nextIndex === -1) return;
         const nextScrollPos = (nextIndex + 1) * optionHi - listHi + 10;
-        if (
-          listRef.current &&
-          (listRef.current.scrollTop - listHi > nextScrollPos ||
-            listRef.current.scrollTop < nextScrollPos)
-        ) {
-          listRef.current.scrollTo(0, nextScrollPos);
+        const scrollTop = listRef.current!.scrollTop;
+        if (scrollTop - listHi > nextScrollPos || scrollTop < nextScrollPos) {
+          listRef.current?.scrollTo(0, nextScrollPos);
         }
         setHoveredOption({ option: options[nextIndex], index: nextIndex });
       },
@@ -135,7 +131,7 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
         ) : (
           <div
             style={{
-              height: `${options.length * optionHi + 5}px`,
+              height: `${options.length * optionHi}px`,
               position: "relative",
             }}
           >
@@ -157,7 +153,6 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
                       hoveredOption.option.label ===
                       options[start + index].label
                     }
-                    isDisabled={options[start + index].isDisabled || false}
                     onMouseEnter={() =>
                       mouseOptionHover(options[start + index], start + index)
                     }
@@ -168,7 +163,7 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
                       transform: `translateY(${(start + index) * optionHi}px)`,
                       position: "absolute",
                       width: "100%",
-                      height: optionHi
+                      height: optionHi,
                     }}
                   />
                 )}

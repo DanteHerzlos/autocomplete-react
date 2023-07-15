@@ -4,9 +4,9 @@ import List, { ListRef } from "./UI/List";
 import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 
-interface GroupBase<T> {
+interface GroupBase<OptionType> {
   label: string;
-  options: T[];
+  options: OptionType[];
 }
 
 interface AutocompleteProps {

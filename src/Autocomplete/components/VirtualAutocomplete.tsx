@@ -4,9 +4,9 @@ import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 
-interface GroupBase<T> {
+interface GroupBase<OptionType> {
   label: string;
-  options: T[];
+  options: OptionType[];
 }
 
 interface AutocompleteProps {

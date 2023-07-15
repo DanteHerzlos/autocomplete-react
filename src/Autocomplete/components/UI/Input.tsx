@@ -5,6 +5,7 @@ import CloseIcon from "../icons/CloseIcon";
 import ArrowDropDownIcon from "../icons/ArrowDropDownIcon";
 import cl from "../../styles/components/UI/Input.module.css";
 import { ListRef } from "./List";
+import { Filtration } from "Autocomplete/utils/Filtration";
 
 interface InputProps {
   onChangeInput?: (event: string) => void;
@@ -42,7 +43,6 @@ const Input = forwardRef<InputRef, InputProps>(
     ref,
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
-
     useImperativeHandle(ref, () => ({
       selectOption(option: OptionType) {
         selectHandler(option);
@@ -52,12 +52,7 @@ const Input = forwardRef<InputRef, InputProps>(
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChangeInput) onChangeInput(e.currentTarget.value);
       setIsFilteredList(true);
-      const newList = [];
-      for (let i = 0; i < options.length; i++) {
-        if (options[i].label.includes(e.currentTarget.value)) {
-          newList.push(options[i]);
-        }
-      }
+      const newList = Filtration.byString(options, e.currentTarget.value);
       setFilteredList(newList);
     };
 
@@ -78,12 +73,7 @@ const Input = forwardRef<InputRef, InputProps>(
       } else {
         inputRef.current!.value = selectedOption.label;
         if (onChangeInput) onChangeInput(selectedOption.label);
-        const newList = [];
-        for (let i = 0; i < options.length; i++) {
-          if (options[i].label.includes(selectedOption.label)) {
-            newList.push(options[i]);
-          }
-        }
+        const newList = Filtration.byString(options, selectedOption.label);
         setFilteredList(newList);
       }
       setIsFilteredList(false);
@@ -104,11 +94,10 @@ const Input = forwardRef<InputRef, InputProps>(
     };
 
     const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (
-        !isFilteredList ||
-        filteredList.filter((el) => !el.isDisabled).length === 0
-      )
+      const notDisabled = Filtration.byDisabled(filteredList);
+      if (!isFilteredList || notDisabled.length === 0) {
         return;
+      }
       if (e.key === "ArrowUp") {
         optionsRef.current!.prevHover();
       }

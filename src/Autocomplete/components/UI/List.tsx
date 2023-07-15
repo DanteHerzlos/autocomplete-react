@@ -13,6 +13,7 @@ import {
 } from "Autocomplete/utils/getNextIndex";
 import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import { InputRef } from "./Input";
+import { Option } from "./Option";
 
 interface ListProps {
   options: OptionType[];
@@ -95,34 +96,19 @@ const List = forwardRef<ListRef, ListProps>(
         }
       >
         {options.length !== 0 ? (
-          options.map((el, i) => {
-            let optionStyle = "default";
-            if (el.isDisabled) {
-              optionStyle = "disabled";
-            } else if (selectedOption && selectedOption.label === el.label) {
-              optionStyle = "selected";
-            } else if (hoveredOption.option.label === el.label) {
-              optionStyle = "hovered";
-            }
-            return (
-              <p
-                key={el.label}
-                ref={(element) => (optionsRef.current[i] = element)}
-                className={
-                  {
-                    default: cl.option,
-                    hovered: [cl.option, cl._hover].join(" "),
-                    selected: [cl.option, cl._selected].join(" "),
-                    disabled: [cl.option, cl._disabled].join(" "),
-                  }[optionStyle]
-                }
-                onMouseEnter={() => mouseOptionHover(el, i)}
-                onClick={() => inputRef.current!.selectOption(el)}
-              >
-                {el.label}
-              </p>
-            );
-          })
+          options.map((el, i) => (
+            <Option
+              key={el.label}
+              option={el}
+              optionRef={(element) => (optionsRef.current[i] = element)}
+              isHovered={hoveredOption.option.label === el.label}
+              isSelected={
+                (selectedOption && selectedOption.label === el.label) || false
+              }
+              onMouseEnter={() => mouseOptionHover(el, i)}
+              onClick={() => inputRef.current!.selectOption(el)}
+            />
+          ))
         ) : (
           <p className={cl.noOptions}>{noOptionMessage}</p>
         )}

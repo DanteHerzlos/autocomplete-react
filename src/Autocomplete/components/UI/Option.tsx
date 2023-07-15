@@ -2,23 +2,21 @@ import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import cl from "../../styles/components/UI/Option.module.css";
 
 interface OptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  isDisabled: boolean;
   isSelected: boolean;
   isHovered: boolean;
   option: OptionType;
   optionRef: React.LegacyRef<HTMLParagraphElement>;
 }
 
-const Option: React.FC<OptionProps> = ({
-  isDisabled,
+export function Option ({
   isHovered,
   isSelected,
   option,
   optionRef,
   ...props
-}) => {
+}: OptionProps) {
   let optionStyle = "default";
-  if (isDisabled) {
+  if (option.isDisabled) {
     optionStyle = "disabled";
   } else if (isSelected) {
     optionStyle = "selected";
@@ -42,6 +40,4 @@ const Option: React.FC<OptionProps> = ({
     </p>
   );
 };
-
-export default Option;
 
