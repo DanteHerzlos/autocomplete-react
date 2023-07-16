@@ -4,7 +4,7 @@ export type OptionType = {
   [key: string]: any;
 };
 
-export type GroupType = {
+export type GroupBase<Type> = {
   label: string;
-  options: OptionType[];
+  options: Type[];
 };

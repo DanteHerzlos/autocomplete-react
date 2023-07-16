@@ -12,11 +12,12 @@
   max-height: 300px;
   overflow-y: auto;
   border-radius: 4px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
-.filteredList._disable{
+.filteredList._disable {
   opacity: 0.5;
   pointer-events: none;
 }
@@ -34,7 +35,7 @@
   background-color: #3b82f680;
 }
 
-.option._disabled{
+.option._disabled {
   color: #cccccc;
   pointer-events: none;
 }
@@ -43,4 +44,12 @@
   padding: 7px 14px;
   cursor: auto;
   color: rgba(0, 0, 0, 0.5);
+}
+
+.group {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+  height: 30px;
 }

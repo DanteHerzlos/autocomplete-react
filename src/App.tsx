@@ -7,13 +7,24 @@ import TextField from "@mui/material/TextField";
 import MuiAutocomplete from "@mui/material/Autocomplete";
 
 const el: OptionType[] = [];
-for (let i = 0; i < 100000; i++) {
+for (let i = 0; i < 10000; i++) {
   el.push({
     label: "element " + i,
     value: i.toString(),
     isDisabled: i % 2 === 0,
   });
 }
+
+const groupedEl = [
+  {
+    label: "Group 1",
+    options: el.slice(0, 10),
+  },
+  {
+    label: "Group 2",
+    options: el.slice(10, 20),
+  },
+];
 
 const App = () => {
   return (
@@ -27,6 +38,7 @@ const App = () => {
       }}
     >
       <VirtualAutocomplete label="elements" options={el} />
+      <Autocomplete grouped label="elements" options={groupedEl} />
       <Select options={el} />
       <MuiAutocomplete
         id="combo-box-demo"

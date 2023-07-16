@@ -1,26 +1,26 @@
 import { useDeferredValue, useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
 import List, { ListRef } from "./UI/List";
-import { OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { GroupBase, OptionType } from "Autocomplete/types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
-
-interface GroupBase<OptionType> {
-  label: string;
-  options: OptionType[];
-}
+import GroupedList from "./UI/GroupedList";
 
 interface AutocompleteProps {
-  options: OptionType[];
+  options: OptionType[] | GroupBase<OptionType>[];
   label?: string;
+  grouped?: boolean;
   noOptionsMessage?: string;
   onChange?: (event: OptionType | null) => void;
   onChangeInput?: (event: string) => void;
+  groupClassName?: string
 }
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
   options,
+  grouped = false,
   label = "",
   noOptionsMessage = "Нет элементов",
+  groupClassName,
   onChange,
   onChangeInput,
 }) => {
@@ -48,15 +48,28 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           options={options}
           optionsRef={optionsRef}
         />
-        <List
-          ref={optionsRef}
-          isDefOptions={deferredFilteredList !== filteredList}
-          options={deferredFilteredList}
-          selectedOption={selectedOption}
-          visible={isFilteredList}
-          noOptionMessage={noOptionsMessage}
-          inputRef={inputRef}
-        />
+        {grouped ? (
+          <GroupedList
+            ref={optionsRef}
+            groupClassName={groupClassName}
+            isDefOptions={deferredFilteredList !== filteredList}
+            groupedOptions={deferredFilteredList}
+            selectedOption={selectedOption}
+            visible={isFilteredList}
+            noOptionMessage={noOptionsMessage}
+            inputRef={inputRef}
+          />
+        ) : (
+          <List
+            ref={optionsRef}
+            isDefOptions={deferredFilteredList !== filteredList}
+            options={deferredFilteredList}
+            selectedOption={selectedOption}
+            visible={isFilteredList}
+            noOptionMessage={noOptionsMessage}
+            inputRef={inputRef}
+          />
+        )}
       </div>
     </div>
   );

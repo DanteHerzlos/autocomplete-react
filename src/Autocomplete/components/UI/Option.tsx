@@ -8,7 +8,7 @@ interface OptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
   optionRef: React.LegacyRef<HTMLParagraphElement>;
 }
 
-export function Option ({
+export function Option({
   isHovered,
   isSelected,
   option,
@@ -39,5 +39,4 @@ export function Option ({
       {option.label}
     </p>
   );
-};
-
+}
