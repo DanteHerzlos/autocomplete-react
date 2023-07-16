@@ -12,7 +12,7 @@ interface AutocompleteProps {
   noOptionsMessage?: string;
   onChange?: (event: OptionType | null) => void;
   onChangeInput?: (event: string) => void;
-  groupClassName?: string
+  groupClassName?: string;
 }
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
@@ -51,9 +51,9 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
         {grouped ? (
           <GroupedList
             ref={optionsRef}
-            groupClassName={groupClassName}
+            groupClassName={groupClassName || ""}
             isDefOptions={deferredFilteredList !== filteredList}
-            groupedOptions={deferredFilteredList}
+            groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
             selectedOption={selectedOption}
             visible={isFilteredList}
             noOptionMessage={noOptionsMessage}

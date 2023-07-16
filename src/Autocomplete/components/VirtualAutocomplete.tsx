@@ -1,15 +1,17 @@
 import { useDeferredValue, useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
-import { OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { OptionType, GroupBase } from "Autocomplete/types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 import VirtualList, { VirtualListRef } from "./UI/VirtualList";
-
+import GroupedVirtualList from "./UI/GroupedVirtualList";
 
 interface AutocompleteProps {
-  options: OptionType[];
+  options: OptionType[] | GroupBase<OptionType>[];
   label?: string;
   noOptionsMessage?: string;
   optionHi?: number;
+  grouped?: boolean;
+  groupClassName?: string;
   onChange?: (event: OptionType | null) => void;
   onChangeInput?: (event: string) => void;
 }
@@ -19,6 +21,8 @@ const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
   options,
   label = "",
   noOptionsMessage = "Нет элементов",
+  groupClassName,
+  grouped = false,
   onChange,
   onChangeInput,
 }) => {
@@ -46,16 +50,30 @@ const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
           options={options}
           optionsRef={optionsRef}
         />
-        <VirtualList
-          optionHi={optionHi}
-          ref={optionsRef}
-          isDefOptions={deferredFilteredList !== filteredList}
-          options={deferredFilteredList}
-          selectedOption={selectedOption}
-          visible={isFilteredList}
-          noOptionMessage={noOptionsMessage}
-          inputRef={inputRef}
-        />
+        {grouped ? (
+          <GroupedVirtualList
+            optionHi={optionHi}
+            ref={optionsRef}
+            groupClassName={groupClassName || ""}
+            isDefOptions={deferredFilteredList !== filteredList}
+            groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
+            selectedOption={selectedOption}
+            visible={isFilteredList}
+            noOptionMessage={noOptionsMessage}
+            inputRef={inputRef}
+          />
+        ) : (
+          <VirtualList
+            optionHi={optionHi}
+            ref={optionsRef}
+            isDefOptions={deferredFilteredList !== filteredList}
+            options={deferredFilteredList}
+            selectedOption={selectedOption}
+            visible={isFilteredList}
+            noOptionMessage={noOptionsMessage}
+            inputRef={inputRef}
+          />
+        )}
       </div>
     </div>
   );
