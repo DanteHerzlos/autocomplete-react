@@ -130,6 +130,7 @@ const GroupedVirtualList = forwardRef<
 
     return (
       <div
+        ref={listRef}
         onMouseDown={(e) => e.preventDefault()}
         className={
           {
@@ -138,15 +139,38 @@ const GroupedVirtualList = forwardRef<
             disabled: [cl.filteredList, cl._disable].join(" "),
           }[listStyle]
         }
+        onScrollCapture={onScrollHandler}
       >
-        {groupedOptions.length !== 0 ? (
-          groupedOptions.map((options, i) =>
-            options.options.map((el, j) =>
-              j === 0 ? (
-                <Fragment key={el.label}>
-                  <p className={[groupClassName, cl.group].join(" ")}>
-                    {options.label}
-                  </p>
+        <div
+          style={{
+            height: `${options.length * optionHi}px`,
+            position: "relative",
+          }}
+        >
+          {groupedOptions.length !== 0 ? (
+            groupedOptions.map((options, i) =>
+              options.options.map((el, j) =>
+                j === 0 ? (
+                  <Fragment key={el.label}>
+                    <p className={[groupClassName, cl.group].join(" ")}>
+                      {options.label}
+                    </p>
+                    <Option
+                      key={el.label}
+                      option={el}
+                      optionRef={(element) =>
+                        (groupedOptionsRef.current[i][j] = element)
+                      }
+                      isHovered={hoveredOption.option.label === el.label}
+                      isSelected={
+                        (selectedOption && selectedOption.label === el.label) ||
+                        false
+                      }
+                      onMouseEnter={() => mouseOptionHover(el, [i, j])}
+                      onClick={() => inputRef.current!.selectOption(el)}
+                    />
+                  </Fragment>
+                ) : (
                   <Option
                     key={el.label}
                     option={el}
@@ -161,28 +185,13 @@ const GroupedVirtualList = forwardRef<
                     onMouseEnter={() => mouseOptionHover(el, [i, j])}
                     onClick={() => inputRef.current!.selectOption(el)}
                   />
-                </Fragment>
-              ) : (
-                <Option
-                  key={el.label}
-                  option={el}
-                  optionRef={(element) =>
-                    (groupedOptionsRef.current[i][j] = element)
-                  }
-                  isHovered={hoveredOption.option.label === el.label}
-                  isSelected={
-                    (selectedOption && selectedOption.label === el.label) ||
-                    false
-                  }
-                  onMouseEnter={() => mouseOptionHover(el, [i, j])}
-                  onClick={() => inputRef.current!.selectOption(el)}
-                />
+                ),
               ),
-            ),
-          )
-        ) : (
-          <p className={cl.noOptions}>{noOptionMessage}</p>
-        )}
+            )
+          ) : (
+            <p className={cl.noOptions}>{noOptionMessage}</p>
+          )}
+        </div>
       </div>
     );
   },
