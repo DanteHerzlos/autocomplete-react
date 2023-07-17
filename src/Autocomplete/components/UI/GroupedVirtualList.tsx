@@ -51,26 +51,25 @@ const GroupedVirtualList = forwardRef<
       noOptionMessage,
       inputRef,
     },
-    ref,
+    ref
   ) => {
     const [hoveredOption, setHoveredOption] = useState<{
       option: OptionType;
       index: number[];
     }>({ option: groupedOptions[0].options[0], index: [0, 0] });
     const groupedOptionsRef = useRef<HTMLParagraphElement[][] | null[][]>(
-      [...new Array(groupedOptions.length)].map(() => []),
+      [...new Array(groupedOptions.length)].map(() => [])
     );
 
     //Virtual props
     const [start, setStart] = useState(0);
     const renderEl = Math.ceil(listHi / optionHi) + 8;
-    const arr = new Array(renderEl).fill(0);
     const listRef = useRef<HTMLParagraphElement>(null);
 
     const onScrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
       const top = e.currentTarget.scrollTop;
       const startEl = Math.ceil(
-        (top - (renderEl / 2) * optionHi + listHi / 2) / optionHi,
+        (top - (renderEl / 2) * optionHi + listHi / 2) / optionHi
       );
       if (start !== startEl) setStart(startEl);
     };
@@ -90,7 +89,7 @@ const GroupedVirtualList = forwardRef<
       prevHover() {
         const prevIndex = getPrevOptionIndex(
           groupedOptions,
-          hoveredOption.index,
+          hoveredOption.index
         );
         if (prevIndex === -1) return;
         groupedOptionsRef.current[prevIndex[0]][prevIndex[1]]!.scrollIntoView({
@@ -104,7 +103,7 @@ const GroupedVirtualList = forwardRef<
       nextHover() {
         const nextIndex = getNextOptionIndex(
           groupedOptions,
-          hoveredOption.index,
+          hoveredOption.index
         );
         if (nextIndex === -1) return;
         groupedOptionsRef.current[nextIndex[0]][nextIndex[1]]!.scrollIntoView({
@@ -122,6 +121,52 @@ const GroupedVirtualList = forwardRef<
 
     const mouseOptionHover = (option: OptionType, index: number[]) => {
       setHoveredOption({ option, index });
+    };
+
+    const sumElements = () => {
+      let sum = 0;
+      for (let i = 0; i < groupedOptions.length; i++) {
+        if (groupedOptions[i].options.length !== 0) {
+          sum += groupedOptions[i].options.length + 1;
+        }
+      }
+      return sum;
+    };
+
+    const calculateRenderList = () => {
+      const arr = [];
+      let localStart = Math.max(start, 0);
+      let count = Math.ceil(listHi / optionHi) + 4;
+      let sum = 0;
+      for (let i = 0; i < groupedOptions.length; i++) {
+        sum += groupedOptions[i].options.length;
+        if (sum >= localStart) {
+          const len = groupedOptions[i].options.length;
+          const begin = len - (sum - localStart);
+          for (let j = begin; j < Math.min(len, count); j++) {
+            if (j === 0) {
+              arr.push({
+                el: {
+                  label: groupedOptions[i].label,
+                  options: null,
+                },
+                group_index: i,
+                element_index: -1,
+              });
+            }
+            arr.push({
+              el: groupedOptions[i].options[j],
+              group_index: i,
+              element_index: j,
+            });
+          }
+          count -= sum - localStart;
+          localStart = sum;
+        }
+        if (sum > localStart + count) break;
+      }
+      console.log(arr.length)
+      return arr;
     };
 
     let listStyle = "default";
@@ -143,58 +188,68 @@ const GroupedVirtualList = forwardRef<
       >
         <div
           style={{
-            height: `${options.length * optionHi}px`,
+            height: `${sumElements() * optionHi || 30}px`,
             position: "relative",
           }}
         >
-          {groupedOptions.length !== 0 ? (
-            groupedOptions.map((options, i) =>
-              options.options.map((el, j) =>
-                j === 0 ? (
-                  <Fragment key={el.label}>
-                    <p className={[groupClassName, cl.group].join(" ")}>
-                      {options.label}
-                    </p>
-                    <Option
-                      key={el.label}
-                      option={el}
-                      optionRef={(element) =>
-                        (groupedOptionsRef.current[i][j] = element)
-                      }
-                      isHovered={hoveredOption.option.label === el.label}
-                      isSelected={
-                        (selectedOption && selectedOption.label === el.label) ||
-                        false
-                      }
-                      onMouseEnter={() => mouseOptionHover(el, [i, j])}
-                      onClick={() => inputRef.current!.selectOption(el)}
-                    />
-                  </Fragment>
+          {sumElements() !== 0 ? (
+            calculateRenderList().map((option, i) => (
+              <Fragment key={option.el.label}>
+                {option.el.hasOwnProperty("options") ? (
+                  <p
+                    style={{
+                      transform: `translateY(${
+                        (Math.max(start, 0) + i) * optionHi
+                      }px)`,
+                      position: "absolute",
+                      width: "100%",
+                      height: optionHi,
+                    }}
+                    className={[groupClassName, cl.group].join(" ")}
+                  >
+                    {option.el.label}
+                  </p>
                 ) : (
                   <Option
-                    key={el.label}
-                    option={el}
+                    key={option.el.label}
+                    option={option.el}
                     optionRef={(element) =>
-                      (groupedOptionsRef.current[i][j] = element)
+                      (groupedOptionsRef.current[option.group_index][
+                        option.element_index
+                      ] = element)
                     }
-                    isHovered={hoveredOption.option.label === el.label}
+                    isHovered={hoveredOption.option.label === option.el.label}
                     isSelected={
-                      (selectedOption && selectedOption.label === el.label) ||
+                      (selectedOption &&
+                        selectedOption.label === option.el.label) ||
                       false
                     }
-                    onMouseEnter={() => mouseOptionHover(el, [i, j])}
-                    onClick={() => inputRef.current!.selectOption(el)}
+                    onMouseEnter={() =>
+                      mouseOptionHover(option.el, [
+                        option.group_index,
+                        option.element_index,
+                      ])
+                    }
+                    onClick={() => inputRef.current!.selectOption(option.el)}
+                    style={{
+                      transform: `translateY(${
+                        (Math.max(start, 0) + i) * optionHi
+                      }px)`,
+                      position: "absolute",
+                      width: "100%",
+                      height: optionHi,
+                    }}
                   />
-                ),
-              ),
-            )
+                )}
+              </Fragment>
+            ))
           ) : (
             <p className={cl.noOptions}>{noOptionMessage}</p>
           )}
         </div>
       </div>
     );
-  },
+  }
 );
 
 export default GroupedVirtualList;
