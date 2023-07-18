@@ -6,6 +6,7 @@ import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 import GroupedVirtualList from "./UI/GroupedVirtualList";
 
 interface AutocompleteProps {
+  required?: boolean;
   checkbox?: boolean;
   options: OptionType[] | GroupBase<OptionType>[];
   label?: string;
@@ -18,6 +19,7 @@ interface AutocompleteProps {
 }
 
 const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
+  required,
   checkbox = false,
   optionHi = 30,
   options,
@@ -39,6 +41,7 @@ const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
     <div>
       <div className={cl.container}>
         <Input
+          required={required}
           ref={inputRef}
           onChange={onChange}
           onChangeInput={onChangeInput}

@@ -50,6 +50,9 @@
   opacity: 0;
 }
 
+.input._invalid {
+  border-color: red;
+}
 
 .close_btn_icon,
 .drop_btn_icon {
@@ -84,4 +87,12 @@
 
 .drop_btn_icon._reverse {
   transform: rotateX(0.5turn);
+}
+
+.invalid_message {
+  color: red;
+  font-size: 0.75rem;
+  position: absolute;
+  bottom: -1rem;
+  left: 0.5rem;
 }

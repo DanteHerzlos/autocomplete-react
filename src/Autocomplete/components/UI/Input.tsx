@@ -1,5 +1,5 @@
 import { OptionType } from "Autocomplete/types/AutocompleteTypes";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import IconButton from "./IconButton";
 import CloseIcon from "../icons/CloseIcon";
 import ArrowDropDownIcon from "../icons/ArrowDropDownIcon";
@@ -8,6 +8,7 @@ import { ListRef } from "./List";
 import { Filtration } from "Autocomplete/utils/Filtration";
 
 interface InputProps {
+  required?: boolean;
   onChangeInput?: (event: string) => void;
   onChange?: (event: OptionType | null) => void;
   setSelectedOption: (option: OptionType | null) => void;
@@ -28,6 +29,7 @@ export interface InputRef {
 const Input = forwardRef<InputRef, InputProps>(
   (
     {
+      required,
       options,
       label,
       onChange,
@@ -42,6 +44,7 @@ const Input = forwardRef<InputRef, InputProps>(
     },
     ref,
   ) => {
+    const [invalid, setInvalid] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => ({
       selectOption(option: OptionType) {
@@ -50,6 +53,7 @@ const Input = forwardRef<InputRef, InputProps>(
     }));
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (invalid) setInvalid(false);
       if (onChangeInput) onChangeInput(e.currentTarget.value);
       setIsFilteredList(true);
       const newList = Filtration.byString(options, e.currentTarget.value);
@@ -58,6 +62,7 @@ const Input = forwardRef<InputRef, InputProps>(
 
     const selectHandler = (el: OptionType) => {
       if (el.isDisabled) return;
+      if (invalid) setInvalid(false);
       if (onChange) onChange(el);
       if (onChangeInput) onChangeInput(el.label);
       inputRef.current!.value = el.label;
@@ -112,12 +117,17 @@ const Input = forwardRef<InputRef, InputProps>(
     return (
       <>
         <input
+          onInvalid={(e) => {
+            e.preventDefault();
+            setInvalid(true);
+          }}
+          required={required}
           onKeyDown={(e) => keyDownHandler(e)}
           onFocus={() => setIsFilteredList(true)}
           onBlur={blurHandler}
           ref={inputRef}
           placeholder="placeholder"
-          className={cl.input}
+          className={invalid ? [cl.input, cl._invalid].join(" ") : cl.input}
           onChange={(e) => changeHandler(e)}
           type="text"
         />
@@ -144,6 +154,7 @@ const Input = forwardRef<InputRef, InputProps>(
             }
           />
         </IconButton>
+        {invalid && <span className={cl.invalid_message}>invalid</span>}
       </>
     );
   },
