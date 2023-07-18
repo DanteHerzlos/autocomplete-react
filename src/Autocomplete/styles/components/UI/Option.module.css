@@ -3,6 +3,7 @@
   padding: 7px 14px;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .option._hover {
@@ -13,7 +14,12 @@
   background-color: #3b82f680;
 }
 
-.option._disabled{
+.option._disabled {
   color: #cccccc;
   pointer-events: none;
+}
+
+.checkbox {
+  height: 1rem;
+  width: 1rem;
 }

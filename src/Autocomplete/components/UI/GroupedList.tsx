@@ -18,6 +18,7 @@ import { InputRef } from "./Input";
 import { Option } from "./Option";
 
 interface GroupedListProps {
+  checkbox: boolean;
   groupedOptions: GroupBase<OptionType>[];
   selectedOption: OptionType | null;
   visible: boolean;
@@ -36,6 +37,7 @@ export interface GroupedListRef {
 const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
   (
     {
+      checkbox = false,
       groupedOptions,
       isDefOptions,
       selectedOption,
@@ -126,6 +128,7 @@ const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
                     {options.label}
                   </p>
                   <Option
+                    checkbox={checkbox}
                     key={el.label}
                     option={el}
                     optionRef={(element) =>
@@ -142,6 +145,7 @@ const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
                 </Fragment>
               ) : (
                 <Option
+                  checkbox={checkbox}
                   key={el.label}
                   option={el}
                   optionRef={(element) =>

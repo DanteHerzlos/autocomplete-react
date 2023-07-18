@@ -18,6 +18,7 @@ import { InputRef } from "./Input";
 import { Option } from "./Option";
 
 interface GroupedVirtualListProps {
+  checkbox: boolean;
   optionHi?: number;
   listHi?: number;
   groupedOptions: GroupBase<OptionType>[];
@@ -41,6 +42,7 @@ const GroupedVirtualList = forwardRef<
 >(
   (
     {
+      checkbox,
       optionHi = 30,
       listHi = 300,
       groupedOptions,
@@ -51,30 +53,31 @@ const GroupedVirtualList = forwardRef<
       noOptionMessage,
       inputRef,
     },
-    ref
+    ref,
   ) => {
     const [hoveredOption, setHoveredOption] = useState<{
       option: OptionType;
       index: number[];
     }>({ option: groupedOptions[0].options[0], index: [0, 0] });
     const groupedOptionsRef = useRef<HTMLParagraphElement[][] | null[][]>(
-      [...new Array(groupedOptions.length)].map(() => [])
+      [...new Array(groupedOptions.length)].map(() => []),
     );
 
     //Virtual props
     const [start, setStart] = useState(0);
-    const renderEl = Math.ceil(listHi / optionHi) + 8;
+    const renderEl = Math.ceil(listHi / optionHi) + 4;
     const listRef = useRef<HTMLParagraphElement>(null);
 
     const onScrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
       const top = e.currentTarget.scrollTop;
       const startEl = Math.ceil(
-        (top - (renderEl / 2) * optionHi + listHi / 2) / optionHi
+        (top - (renderEl / 2) * optionHi + listHi / 2) / optionHi,
       );
-      if (start !== startEl) setStart(startEl);
+      if (start !== startEl) {
+        setStart(Math.max(startEl, 0));
+      }
     };
     ////////////////////////
-
     useEffect(() => {
       let firstEnabled = getfirstEnabled(groupedOptions);
       if (firstEnabled !== -1) {
@@ -89,12 +92,23 @@ const GroupedVirtualList = forwardRef<
       prevHover() {
         const prevIndex = getPrevOptionIndex(
           groupedOptions,
-          hoveredOption.index
+          hoveredOption.index,
         );
+
         if (prevIndex === -1) return;
-        groupedOptionsRef.current[prevIndex[0]][prevIndex[1]]!.scrollIntoView({
-          block: "nearest",
-        });
+        let sum = 0;
+        for (let i = 0; i < prevIndex[0]; i++) {
+          const len = groupedOptions[i].options.length;
+          if (len === 0) continue;
+          sum += len + 1;
+        }
+        sum += prevIndex[1];
+        const prevScrollPos = sum * optionHi - 5;
+        const scrollTop = listRef.current!.scrollTop;
+        if (scrollTop > prevScrollPos || scrollTop + listHi < prevScrollPos) {
+          listRef.current?.scrollTo(0, prevScrollPos);
+        }
+
         setHoveredOption({
           option: groupedOptions[prevIndex[0]].options[prevIndex[1]],
           index: prevIndex,
@@ -103,12 +117,21 @@ const GroupedVirtualList = forwardRef<
       nextHover() {
         const nextIndex = getNextOptionIndex(
           groupedOptions,
-          hoveredOption.index
+          hoveredOption.index,
         );
         if (nextIndex === -1) return;
-        groupedOptionsRef.current[nextIndex[0]][nextIndex[1]]!.scrollIntoView({
-          block: "nearest",
-        });
+        let sum = 0;
+        for (let i = 0; i < nextIndex[0]; i++) {
+          const len = groupedOptions[i].options.length;
+          if (len === 0) continue;
+          sum += len + 1;
+        }
+        sum += nextIndex[1] + 2;
+        const scrollTop = listRef.current!.scrollTop;
+        const nextScrollPos = sum * optionHi - listHi + 10;
+        if (scrollTop - listHi > nextScrollPos || scrollTop < nextScrollPos) {
+          listRef.current?.scrollTo(0, nextScrollPos);
+        }
         setHoveredOption({
           option: groupedOptions[nextIndex[0]].options[nextIndex[1]],
           index: nextIndex,
@@ -135,25 +158,27 @@ const GroupedVirtualList = forwardRef<
 
     const calculateRenderList = () => {
       const arr = [];
-      let localStart = Math.max(start, 0);
-      let count = Math.ceil(listHi / optionHi) + 4;
+      let localStart = start;
+      let count = renderEl;
       let sum = 0;
       for (let i = 0; i < groupedOptions.length; i++) {
-        sum += groupedOptions[i].options.length;
+        const len = groupedOptions[i].options.length;
+        if (len !== 0) {
+          sum += len + 1;
+        }
         if (sum >= localStart) {
-          const len = groupedOptions[i].options.length;
-          const begin = len - (sum - localStart);
-          for (let j = begin; j < Math.min(len, count); j++) {
-            if (j === 0) {
-              arr.push({
-                el: {
-                  label: groupedOptions[i].label,
-                  options: null,
-                },
-                group_index: i,
-                element_index: -1,
-              });
-            }
+          if (sum === localStart + len + 1) {
+            arr.push({
+              el: {
+                label: groupedOptions[i].label,
+                options: null,
+              },
+              group_index: i,
+              element_index: -1,
+            });
+          }
+          const begin = len + 1 - (sum - localStart);
+          for (let j = begin; j < Math.min(len, begin + count); j++) {
             arr.push({
               el: groupedOptions[i].options[j],
               group_index: i,
@@ -165,7 +190,6 @@ const GroupedVirtualList = forwardRef<
         }
         if (sum > localStart + count) break;
       }
-      console.log(arr.length)
       return arr;
     };
 
@@ -194,13 +218,11 @@ const GroupedVirtualList = forwardRef<
         >
           {sumElements() !== 0 ? (
             calculateRenderList().map((option, i) => (
-              <Fragment key={option.el.label}>
+              <Fragment key={start + i}>
                 {option.el.hasOwnProperty("options") ? (
                   <p
                     style={{
-                      transform: `translateY(${
-                        (Math.max(start, 0) + i) * optionHi
-                      }px)`,
+                      transform: `translateY(${(start + i) * optionHi}px)`,
                       position: "absolute",
                       width: "100%",
                       height: optionHi,
@@ -211,6 +233,7 @@ const GroupedVirtualList = forwardRef<
                   </p>
                 ) : (
                   <Option
+                    checkbox={checkbox}
                     key={option.el.label}
                     option={option.el}
                     optionRef={(element) =>
@@ -232,9 +255,7 @@ const GroupedVirtualList = forwardRef<
                     }
                     onClick={() => inputRef.current!.selectOption(option.el)}
                     style={{
-                      transform: `translateY(${
-                        (Math.max(start, 0) + i) * optionHi
-                      }px)`,
+                      transform: `translateY(${(start + i) * optionHi}px)`,
                       position: "absolute",
                       width: "100%",
                       height: optionHi,
@@ -249,7 +270,7 @@ const GroupedVirtualList = forwardRef<
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default GroupedVirtualList;

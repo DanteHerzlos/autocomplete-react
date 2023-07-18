@@ -17,6 +17,7 @@ import { InputRef } from "./Input";
 import { Option } from "./Option";
 
 interface VirtualListProps {
+  checkbox: boolean;
   optionHi?: number;
   listHi?: number;
   options: OptionType[];
@@ -36,6 +37,7 @@ export interface VirtualListRef {
 const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
   (
     {
+      checkbox,
       optionHi = 30,
       listHi = 300,
       options,
@@ -139,6 +141,7 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
               <Fragment key={start + index}>
                 {options.length > start + index && start + index >= 0 && (
                   <Option
+                    checkbox={checkbox}
                     option={options[start + index]}
                     optionRef={(element) =>
                       (optionsRef.current[start + index] = element)

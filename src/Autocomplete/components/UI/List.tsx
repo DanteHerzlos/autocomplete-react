@@ -16,6 +16,7 @@ import { InputRef } from "./Input";
 import { Option } from "./Option";
 
 interface ListProps {
+  checkbox: boolean;
   options: OptionType[];
   selectedOption: OptionType | null;
   visible: boolean;
@@ -33,6 +34,7 @@ export interface ListRef {
 const List = forwardRef<ListRef, ListProps>(
   (
     {
+      checkbox,
       options,
       isDefOptions,
       selectedOption,
@@ -98,6 +100,7 @@ const List = forwardRef<ListRef, ListProps>(
         {options.length !== 0 ? (
           options.map((el, i) => (
             <Option
+              checkbox={checkbox}
               key={el.label}
               option={el}
               optionRef={(element) => (optionsRef.current[i] = element)}

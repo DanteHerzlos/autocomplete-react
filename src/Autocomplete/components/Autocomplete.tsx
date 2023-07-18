@@ -6,6 +6,7 @@ import Input, { InputRef } from "./UI/Input";
 import GroupedList from "./UI/GroupedList";
 
 interface AutocompleteProps {
+  checkbox?: boolean;
   options: OptionType[] | GroupBase<OptionType>[];
   label?: string;
   grouped?: boolean;
@@ -15,7 +16,8 @@ interface AutocompleteProps {
   groupClassName?: string;
 }
 
-const Autocomplete: React.FC<AutocompleteProps> = ({
+const Autocomplete = ({
+  checkbox = false,
   options,
   grouped = false,
   label = "",
@@ -23,7 +25,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   groupClassName,
   onChange,
   onChangeInput,
-}) => {
+}: AutocompleteProps) => {
   const inputRef = useRef<InputRef>(null);
   const optionsRef = useRef<ListRef>(null);
   const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
@@ -50,6 +52,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
         />
         {grouped ? (
           <GroupedList
+            checkbox={checkbox}
             ref={optionsRef}
             groupClassName={groupClassName || ""}
             isDefOptions={deferredFilteredList !== filteredList}
@@ -61,6 +64,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           />
         ) : (
           <List
+            checkbox={checkbox}
             ref={optionsRef}
             isDefOptions={deferredFilteredList !== filteredList}
             options={deferredFilteredList}

@@ -1,14 +1,16 @@
 import { OptionType } from "Autocomplete/types/AutocompleteTypes";
 import cl from "../../styles/components/UI/Option.module.css";
 
-interface OptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
+interface OptionProps extends React.HTMLAttributes<HTMLDivElement> {
+  checkbox?: boolean;
   isSelected: boolean;
   isHovered: boolean;
   option: OptionType;
-  optionRef: React.LegacyRef<HTMLParagraphElement>;
+  optionRef: React.LegacyRef<HTMLDivElement>;
 }
 
 export function Option({
+  checkbox = false,
   isHovered,
   isSelected,
   option,
@@ -18,13 +20,13 @@ export function Option({
   let optionStyle = "default";
   if (option.isDisabled) {
     optionStyle = "disabled";
-  } else if (isSelected) {
+  } else if (isSelected && !checkbox) {
     optionStyle = "selected";
   } else if (isHovered) {
     optionStyle = "hovered";
   }
   return (
-    <p
+    <div
       {...props}
       ref={optionRef}
       className={
@@ -36,7 +38,16 @@ export function Option({
         }[optionStyle]
       }
     >
-      {option.label}
-    </p>
+      {checkbox && (
+        <input
+          className={cl.checkbox}
+          readOnly
+          type="checkbox"
+          disabled={option.isDisabled}
+          checked={isSelected}
+        />
+      )}
+      <span>{option.label}</span>
+    </div>
   );
 }

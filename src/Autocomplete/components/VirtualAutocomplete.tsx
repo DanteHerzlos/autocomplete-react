@@ -6,6 +6,7 @@ import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 import GroupedVirtualList from "./UI/GroupedVirtualList";
 
 interface AutocompleteProps {
+  checkbox?: boolean;
   options: OptionType[] | GroupBase<OptionType>[];
   label?: string;
   noOptionsMessage?: string;
@@ -17,6 +18,7 @@ interface AutocompleteProps {
 }
 
 const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
+  checkbox = false,
   optionHi = 30,
   options,
   label = "",
@@ -52,6 +54,7 @@ const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
         />
         {grouped ? (
           <GroupedVirtualList
+            checkbox={checkbox}
             optionHi={optionHi}
             ref={optionsRef}
             groupClassName={groupClassName || ""}
@@ -64,6 +67,7 @@ const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
           />
         ) : (
           <VirtualList
+            checkbox={checkbox}
             optionHi={optionHi}
             ref={optionsRef}
             isDefOptions={deferredFilteredList !== filteredList}
