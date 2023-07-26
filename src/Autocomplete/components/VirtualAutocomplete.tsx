@@ -75,7 +75,7 @@ const VirtualAutocomplete = ({
             isDefOptions={deferredFilteredList !== filteredList}
             groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
             selectedOption={selectedOption}
-            visible={isFilteredList}
+            visible={isFilteredList && !isLoading}
             noOptionMessage={noOptionsMessage}
             inputRef={inputRef}
           />
@@ -87,7 +87,7 @@ const VirtualAutocomplete = ({
             isDefOptions={deferredFilteredList !== filteredList}
             options={deferredFilteredList}
             selectedOption={selectedOption}
-            visible={isFilteredList}
+            visible={isFilteredList && !isLoading}
             noOptionMessage={noOptionsMessage}
             inputRef={inputRef}
           />
