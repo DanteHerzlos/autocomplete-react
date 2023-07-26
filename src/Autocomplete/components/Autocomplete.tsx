@@ -44,51 +44,49 @@ const Autocomplete = ({
   const deferredFilteredList = useDeferredValue(filteredList);
 
   return (
-    <div>
-      <div className={cl.container}>
-        <Input
-          disabled={disabled}
-          isLoading={isLoading}
-          defaultValue={defaultValue}
-          required={required}
-          ref={inputRef}
-          onChange={onChange}
-          onChangeInput={onChangeInput}
-          setFilteredList={setFilteredList}
-          filteredList={deferredFilteredList}
-          isFilteredList={isFilteredList}
-          setIsFilteredList={setIsFilteredList}
-          setSelectedOption={setSelectedOption}
+    <div className={cl.container}>
+      <Input
+        disabled={disabled}
+        isLoading={isLoading}
+        defaultValue={defaultValue}
+        required={required}
+        ref={inputRef}
+        onChange={onChange}
+        onChangeInput={onChangeInput}
+        setFilteredList={setFilteredList}
+        filteredList={deferredFilteredList}
+        isFilteredList={isFilteredList}
+        setIsFilteredList={setIsFilteredList}
+        setSelectedOption={setSelectedOption}
+        selectedOption={selectedOption}
+        label={label}
+        options={options}
+        optionsRef={optionsRef}
+      />
+      {grouped ? (
+        <GroupedList
+          checkbox={checkbox}
+          ref={optionsRef}
+          groupClassName={groupClassName || ""}
+          isDefOptions={deferredFilteredList !== filteredList}
+          groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
           selectedOption={selectedOption}
-          label={label}
-          options={options}
-          optionsRef={optionsRef}
+          visible={isFilteredList && !isLoading}
+          noOptionMessage={noOptionsMessage}
+          inputRef={inputRef}
         />
-        {grouped ? (
-          <GroupedList
-            checkbox={checkbox}
-            ref={optionsRef}
-            groupClassName={groupClassName || ""}
-            isDefOptions={deferredFilteredList !== filteredList}
-            groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
-            selectedOption={selectedOption}
-            visible={isFilteredList && !isLoading}
-            noOptionMessage={noOptionsMessage}
-            inputRef={inputRef}
-          />
-        ) : (
-          <List
-            checkbox={checkbox}
-            ref={optionsRef}
-            isDefOptions={deferredFilteredList !== filteredList}
-            options={deferredFilteredList}
-            selectedOption={selectedOption}
-            visible={isFilteredList && !isLoading}
-            noOptionMessage={noOptionsMessage}
-            inputRef={inputRef}
-          />
-        )}
-      </div>
+      ) : (
+        <List
+          checkbox={checkbox}
+          ref={optionsRef}
+          isDefOptions={deferredFilteredList !== filteredList}
+          options={deferredFilteredList}
+          selectedOption={selectedOption}
+          visible={isFilteredList && !isLoading}
+          noOptionMessage={noOptionsMessage}
+          inputRef={inputRef}
+        />
+      )}
     </div>
   );
 };
