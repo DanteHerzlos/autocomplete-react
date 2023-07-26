@@ -123,13 +123,12 @@ const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
           groupedOptions.map((options, i) =>
             options.options.map((el, j) =>
               j === 0 ? (
-                <Fragment key={el.label}>
+                <Fragment key={options.label + el.label}>
                   <p className={[groupClassName, cl.group].join(" ")}>
                     {options.label}
                   </p>
                   <Option
                     checkbox={checkbox}
-                    key={el.label}
                     option={el}
                     optionRef={(element) =>
                       (groupedOptionsRef.current[i][j] = element)
@@ -146,7 +145,7 @@ const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
               ) : (
                 <Option
                   checkbox={checkbox}
-                  key={el.label}
+                  key={options.label + el.label}
                   option={el}
                   optionRef={(element) =>
                     (groupedOptionsRef.current[i][j] = element)

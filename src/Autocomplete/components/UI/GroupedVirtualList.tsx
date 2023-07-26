@@ -234,7 +234,6 @@ const GroupedVirtualList = forwardRef<
                 ) : (
                   <Option
                     checkbox={checkbox}
-                    key={option.el.label}
                     option={option.el}
                     optionRef={(element) =>
                       (groupedOptionsRef.current[option.group_index][
