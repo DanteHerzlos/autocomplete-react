@@ -6,8 +6,11 @@ import ArrowDropDownIcon from "../icons/ArrowDropDownIcon";
 import cl from "../../styles/components/UI/Input.module.css";
 import { ListRef } from "./List";
 import { Filtration } from "Autocomplete/utils/Filtration";
+import CircularLoader from "./CircularLoader";
 
 interface InputProps {
+  disabled?: boolean;
+  isLoading?: boolean;
   defaultValue?: OptionType;
   required?: boolean;
   onChangeInput?: (event: string) => void;
@@ -30,6 +33,8 @@ export interface InputRef {
 const Input = forwardRef<InputRef, InputProps>(
   (
     {
+      disabled = false,
+      isLoading = false,
       defaultValue,
       required,
       options,
@@ -86,7 +91,10 @@ const Input = forwardRef<InputRef, InputProps>(
       setIsFilteredList(false);
     };
 
-    const clearHandler = () => {
+    const clearHandler = (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+      e.preventDefault();
       inputRef.current!.focus();
       inputRef.current!.value = "";
       setFilteredList(options);
@@ -95,7 +103,10 @@ const Input = forwardRef<InputRef, InputProps>(
       if (onChange) onChange(null);
     };
 
-    const dropDownHandler = () => {
+    const dropDownHandler = (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+      e.preventDefault();
       inputRef.current!.focus();
       setIsFilteredList(!isFilteredList);
     };
@@ -119,6 +130,7 @@ const Input = forwardRef<InputRef, InputProps>(
     return (
       <>
         <input
+          disabled={disabled || isLoading}
           defaultValue={defaultValue ? defaultValue.label : ""}
           onInvalid={(e) => {
             e.preventDefault();
@@ -137,7 +149,11 @@ const Input = forwardRef<InputRef, InputProps>(
         <div onClick={() => inputRef.current?.focus()} className={cl.label}>
           {label}
         </div>
+        {isLoading && (
+          <CircularLoader style={{ width: "2rem" }} className={cl.loader} />
+        )}
         <IconButton
+          disabled={disabled}
           onMouseDown={(e) => e.preventDefault()}
           onClick={clearHandler}
           className={cl.close_btn}
@@ -145,6 +161,7 @@ const Input = forwardRef<InputRef, InputProps>(
           <CloseIcon className={cl.close_btn_icon} />
         </IconButton>
         <IconButton
+          disabled={disabled}
           onMouseDown={(e) => e.preventDefault()}
           onClick={dropDownHandler}
           className={cl.drop_btn}

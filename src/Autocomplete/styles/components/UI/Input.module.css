@@ -16,12 +16,19 @@
   border-color: rgba(0, 0, 0, 0.87);
 }
 
+.input:disabled {
+  background-color: rgba(0, 0, 0, 0.05); 
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+
 .input:focus {
   border: 1px solid #2196f3;
   outline: 1px solid #2196f3;
 }
 
 .label {
+  user-select: none;
   background-color: #ffffff;
   padding: 0px 5px;
   position: absolute;
@@ -31,6 +38,10 @@
   color: rgba(0, 0, 0, 0.5);
   transition: 0.14s ease-in;
   transition-property: top, font-size;
+}
+
+.input:disabled + .label{
+  background-color: rgba(0, 0, 0, 0); 
 }
 
 .input:focus + .label {
@@ -95,4 +106,10 @@
   position: absolute;
   bottom: -1rem;
   left: 0.5rem;
+}
+
+.loader {
+  position: absolute;
+  top: 0.5rem;
+  right: 3rem;
 }

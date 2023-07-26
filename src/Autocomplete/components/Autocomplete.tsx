@@ -6,6 +6,8 @@ import Input, { InputRef } from "./UI/Input";
 import GroupedList from "./UI/GroupedList";
 
 interface AutocompleteProps {
+  disabled?: boolean;
+  isLoading?: boolean;
   defaultValue?: OptionType;
   required?: boolean;
   checkbox?: boolean;
@@ -19,6 +21,8 @@ interface AutocompleteProps {
 }
 
 const Autocomplete = ({
+  disabled = false,
+  isLoading = false,
   required,
   checkbox = false,
   options,
@@ -43,6 +47,8 @@ const Autocomplete = ({
     <div>
       <div className={cl.container}>
         <Input
+          disabled={disabled}
+          isLoading={isLoading}
           defaultValue={defaultValue}
           required={required}
           ref={inputRef}

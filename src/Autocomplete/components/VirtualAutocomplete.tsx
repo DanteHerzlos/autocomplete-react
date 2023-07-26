@@ -6,6 +6,8 @@ import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 import GroupedVirtualList from "./UI/GroupedVirtualList";
 
 interface AutocompleteProps {
+  isLoading?: boolean;
+  disabled?: boolean;
   defaultValue?: OptionType;
   required?: boolean;
   checkbox?: boolean;
@@ -20,6 +22,8 @@ interface AutocompleteProps {
 }
 
 const VirtualAutocomplete = ({
+  isLoading = false,
+  disabled = false,
   defaultValue,
   required,
   checkbox = false,
@@ -45,6 +49,8 @@ const VirtualAutocomplete = ({
     <div>
       <div className={cl.container}>
         <Input
+          disabled={disabled}
+          isLoading={isLoading}
           defaultValue={defaultValue}
           required={required}
           ref={inputRef}
