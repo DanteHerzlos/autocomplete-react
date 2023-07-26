@@ -6,6 +6,7 @@ import Input, { InputRef } from "./UI/Input";
 import GroupedList from "./UI/GroupedList";
 
 interface AutocompleteProps {
+  defaultValue?: OptionType;
   required?: boolean;
   checkbox?: boolean;
   options: OptionType[] | GroupBase<OptionType>[];
@@ -25,6 +26,7 @@ const Autocomplete = ({
   label = "",
   noOptionsMessage = "Нет элементов",
   groupClassName,
+  defaultValue,
   onChange,
   onChangeInput,
 }: AutocompleteProps) => {
@@ -32,13 +34,16 @@ const Autocomplete = ({
   const optionsRef = useRef<ListRef>(null);
   const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
   const [filteredList, setFilteredList] = useState<OptionType[]>(options);
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(
+    defaultValue || null,
+  );
   const deferredFilteredList = useDeferredValue(filteredList);
 
   return (
     <div>
       <div className={cl.container}>
         <Input
+          defaultValue={defaultValue}
           required={required}
           ref={inputRef}
           onChange={onChange}

@@ -6,6 +6,7 @@ import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 import GroupedVirtualList from "./UI/GroupedVirtualList";
 
 interface AutocompleteProps {
+  defaultValue?: OptionType;
   required?: boolean;
   checkbox?: boolean;
   options: OptionType[] | GroupBase<OptionType>[];
@@ -18,7 +19,8 @@ interface AutocompleteProps {
   onChangeInput?: (event: string) => void;
 }
 
-const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
+const VirtualAutocomplete = ({
+  defaultValue,
   required,
   checkbox = false,
   optionHi = 30,
@@ -29,18 +31,21 @@ const VirtualAutocomplete: React.FC<AutocompleteProps> = ({
   grouped = false,
   onChange,
   onChangeInput,
-}) => {
+}: AutocompleteProps) => {
   const inputRef = useRef<InputRef>(null);
   const optionsRef = useRef<VirtualListRef>(null);
   const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
   const [filteredList, setFilteredList] = useState<OptionType[]>(options);
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(
+    defaultValue || null,
+  );
   const deferredFilteredList = useDeferredValue(filteredList);
 
   return (
     <div>
       <div className={cl.container}>
         <Input
+          defaultValue={defaultValue}
           required={required}
           ref={inputRef}
           onChange={onChange}

@@ -8,6 +8,7 @@ import { ListRef } from "./List";
 import { Filtration } from "Autocomplete/utils/Filtration";
 
 interface InputProps {
+  defaultValue?: OptionType;
   required?: boolean;
   onChangeInput?: (event: string) => void;
   onChange?: (event: OptionType | null) => void;
@@ -29,6 +30,7 @@ export interface InputRef {
 const Input = forwardRef<InputRef, InputProps>(
   (
     {
+      defaultValue,
       required,
       options,
       label,
@@ -117,6 +119,7 @@ const Input = forwardRef<InputRef, InputProps>(
     return (
       <>
         <input
+          defaultValue={defaultValue ? defaultValue.label : ""}
           onInvalid={(e) => {
             e.preventDefault();
             setInvalid(true);
