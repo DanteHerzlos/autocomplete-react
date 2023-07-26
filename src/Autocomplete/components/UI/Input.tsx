@@ -176,7 +176,11 @@ const Input = forwardRef<InputRef, InputProps>(
             }
           />
         </IconButton>
-        {invalid && <span className={cl.invalid_message}>invalid</span>}
+        {invalid && (
+          <span className={cl.invalid_message}>
+            {inputRef.current?.validationMessage}
+          </span>
+        )}
       </>
     );
   },

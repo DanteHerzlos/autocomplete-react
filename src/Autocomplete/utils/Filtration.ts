@@ -29,7 +29,7 @@ export class Filtration {
           options: this.byDisabled(options[i].options),
           label: options[i].label,
         });
-      } else if (!options[i].isDisabled) {
+      } else if (!(options[i] as OptionType).isDisabled) {
         newArr.push(options[i]);
       }
     }

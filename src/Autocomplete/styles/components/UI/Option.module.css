@@ -7,7 +7,7 @@
 }
 
 .option._hover {
-  background-color: #eeeeee;
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .option._selected {

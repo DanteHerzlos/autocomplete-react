@@ -23,24 +23,6 @@
   pointer-events: none;
 }
 
-.option {
-  cursor: pointer;
-  padding: 7px 14px;
-}
-
-.option._hover {
-  background-color: #eeeeee;
-}
-
-.option._selected {
-  background-color: #3b82f680;
-}
-
-.option._disabled {
-  color: #cccccc;
-  pointer-events: none;
-}
-
 .noOptions {
   padding: 7px 14px;
   cursor: auto;
