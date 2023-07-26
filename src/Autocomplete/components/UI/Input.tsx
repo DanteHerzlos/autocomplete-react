@@ -112,7 +112,6 @@ const Input = forwardRef<InputRef, InputProps>(
     };
 
     const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      e.preventDefault()
       const notDisabled = Filtration.byDisabled(filteredList);
       if (!isFilteredList || notDisabled.length === 0) {
         return;
