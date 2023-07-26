@@ -123,6 +123,7 @@ const Input = forwardRef<InputRef, InputProps>(
         optionsRef.current!.nextHover();
       }
       if (e.key === "Enter") {
+        e.preventDefault()
         selectHandler(optionsRef.current!.getHovered());
       }
     };
