@@ -152,16 +152,18 @@ const Input = forwardRef<InputRef, InputProps>(
         {isLoading && (
           <CircularLoader style={{ width: "2rem" }} className={cl.loader} />
         )}
+        {!isLoading && (
+          <IconButton
+            disabled={disabled || isLoading}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={clearHandler}
+            className={cl.close_btn}
+          >
+            <CloseIcon className={cl.close_btn_icon} />
+          </IconButton>
+        )}
         <IconButton
-          disabled={disabled}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={clearHandler}
-          className={cl.close_btn}
-        >
-          <CloseIcon className={cl.close_btn_icon} />
-        </IconButton>
-        <IconButton
-          disabled={disabled}
+          disabled={disabled || isLoading}
           onMouseDown={(e) => e.preventDefault()}
           onClick={dropDownHandler}
           className={cl.drop_btn}

@@ -17,10 +17,9 @@
 }
 
 .input:disabled {
-  background-color: rgba(0, 0, 0, 0.05); 
+  background-color: rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
-
 
 .input:focus {
   border: 1px solid #2196f3;
@@ -40,8 +39,8 @@
   transition-property: top, font-size;
 }
 
-.input:disabled + .label{
-  background-color: rgba(0, 0, 0, 0); 
+.input:disabled + .label {
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .input:focus + .label {
@@ -109,7 +108,8 @@
 }
 
 .loader {
+  z-index: 3;
   position: absolute;
   top: 0.5rem;
-  right: 3rem;
+  right: 2.25rem;
 }
