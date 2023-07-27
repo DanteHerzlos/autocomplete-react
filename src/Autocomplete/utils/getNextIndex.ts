@@ -1,4 +1,4 @@
-import { OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { OptionType } from "../types/AutocompleteTypes";
 
 export const getNextOptionIndex = (options: OptionType[], cursor: number) => {
   if(cursor < 0) throw new Error('Cursor out of range!')

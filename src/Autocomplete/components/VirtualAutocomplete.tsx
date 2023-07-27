@@ -1,6 +1,6 @@
 import { useDeferredValue, useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
-import { OptionType, GroupBase } from "Autocomplete/types/AutocompleteTypes";
+import { OptionType, GroupBase } from "../types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 import GroupedVirtualList from "./UI/GroupedVirtualList";

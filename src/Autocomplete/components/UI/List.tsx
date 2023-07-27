@@ -10,8 +10,8 @@ import cl from "../../styles/components/UI/List.module.css";
 import {
   getNextOptionIndex,
   getPrevOptionIndex,
-} from "Autocomplete/utils/getNextIndex";
-import { OptionType } from "Autocomplete/types/AutocompleteTypes";
+} from "../../utils/getNextIndex";
+import { OptionType } from "../../types/AutocompleteTypes";
 import { InputRef } from "./Input";
 import { Option } from "./Option";
 

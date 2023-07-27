@@ -1,7 +1,7 @@
 import { useDeferredValue, useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
 import List, { ListRef } from "./UI/List";
-import { GroupBase, OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { GroupBase, OptionType } from "../types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 import GroupedList from "./UI/GroupedList";
 

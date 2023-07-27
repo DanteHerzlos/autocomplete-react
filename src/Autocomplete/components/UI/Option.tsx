@@ -1,4 +1,4 @@
-import { OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { OptionType } from "../../types/AutocompleteTypes";
 import cl from "../../styles/components/UI/Option.module.css";
 
 interface OptionProps extends React.HTMLAttributes<HTMLDivElement> {

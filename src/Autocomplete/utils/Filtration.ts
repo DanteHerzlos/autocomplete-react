@@ -1,4 +1,4 @@
-import { GroupBase, OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { GroupBase, OptionType } from "../types/AutocompleteTypes";
 
 export class Filtration {
   static byString(

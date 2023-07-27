@@ -1,11 +1,11 @@
-import { OptionType } from "Autocomplete/types/AutocompleteTypes";
+import { OptionType } from "../../types/AutocompleteTypes";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import IconButton from "./IconButton";
 import CloseIcon from "../icons/CloseIcon";
 import ArrowDropDownIcon from "../icons/ArrowDropDownIcon";
 import cl from "../../styles/components/UI/Input.module.css";
 import { ListRef } from "./List";
-import { Filtration } from "Autocomplete/utils/Filtration";
+import { Filtration } from "../../utils/Filtration";
 import CircularLoader from "./CircularLoader";
 
 interface InputProps {

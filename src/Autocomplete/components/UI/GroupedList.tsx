@@ -12,8 +12,8 @@ import {
   getNextOptionIndex,
   getPrevOptionIndex,
   getfirstEnabled,
-} from "Autocomplete/utils/getGroupedIndex";
-import { GroupBase, OptionType } from "Autocomplete/types/AutocompleteTypes";
+} from "../../utils/getGroupedIndex";
+import { GroupBase, OptionType } from "../../types/AutocompleteTypes";
 import { InputRef } from "./Input";
 import { Option } from "./Option";
 

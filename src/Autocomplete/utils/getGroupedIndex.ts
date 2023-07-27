@@ -1,4 +1,4 @@
-import { OptionType, GroupBase } from "Autocomplete/types/AutocompleteTypes";
+import { OptionType, GroupBase } from "../types/AutocompleteTypes";
 
 export const getNextOptionIndex = (
   groupedOptions: GroupBase<OptionType>[],
