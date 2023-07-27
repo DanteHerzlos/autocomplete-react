@@ -58,7 +58,13 @@ const GroupedVirtualList = forwardRef<
     const [hoveredOption, setHoveredOption] = useState<{
       option: OptionType;
       index: number[];
-    }>({ option: groupedOptions[0].options[0], index: [0, 0] });
+    }>({
+      option:
+        groupedOptions.length === 0
+          ? ({} as OptionType)
+          : groupedOptions[0].options[0],
+      index: [0, 0],
+    });
     const groupedOptionsRef = useRef<HTMLParagraphElement[][] | null[][]>(
       [...new Array(groupedOptions.length)].map(() => []),
     );

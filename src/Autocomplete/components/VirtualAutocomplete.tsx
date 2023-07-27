@@ -11,7 +11,7 @@ interface AutocompleteProps {
   defaultValue?: OptionType;
   required?: boolean;
   checkbox?: boolean;
-  options: OptionType[] | GroupBase<OptionType>[];
+  options?: OptionType[] | GroupBase<OptionType>[];
   label?: string;
   noOptionsMessage?: string;
   optionHi?: number;
@@ -28,7 +28,7 @@ const VirtualAutocomplete = ({
   required,
   checkbox = false,
   optionHi = 30,
-  options,
+  options = [],
   label = "",
   noOptionsMessage = "Нет элементов",
   groupClassName,

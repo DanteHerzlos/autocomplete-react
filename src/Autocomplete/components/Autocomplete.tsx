@@ -11,7 +11,7 @@ interface AutocompleteProps {
   defaultValue?: OptionType;
   required?: boolean;
   checkbox?: boolean;
-  options: OptionType[] | GroupBase<OptionType>[];
+  options?: OptionType[] | GroupBase<OptionType>[];
   label?: string;
   grouped?: boolean;
   noOptionsMessage?: string;
@@ -25,7 +25,7 @@ const Autocomplete = ({
   isLoading = false,
   required,
   checkbox = false,
-  options,
+  options = [],
   grouped = false,
   label = "",
   noOptionsMessage = "Нет элементов",
