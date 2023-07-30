@@ -19,7 +19,7 @@
 }
 
 .filteredList._disable {
-  opacity: 0.5;
+  background-color: #eeeeee;
   pointer-events: none;
 }
 
