@@ -113,7 +113,6 @@ const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
     let listStyle = "default";
     if (visible && isDefOptions) listStyle = "disabled";
     if (!visible) listStyle = "hide";
-
     return (
       <div
         onMouseDown={(e) => e.preventDefault()}
@@ -136,9 +135,12 @@ const GroupedList = forwardRef<GroupedListRef, GroupedListProps>(
                   <Option
                     checkbox={checkbox}
                     option={el}
-                    optionRef={(element) =>
-                      (groupedOptionsRef.current[i][j] = element)
-                    }
+                    optionRef={(element) => {
+                      if (groupedOptionsRef.current.length >= i) {
+                        groupedOptionsRef.current.push([]);
+                      }
+                      groupedOptionsRef.current[i][j] = element;
+                    }}
                     isHovered={hoveredOption.option.label === el.label}
                     isSelected={
                       (selectedOption && selectedOption.label === el.label) ||

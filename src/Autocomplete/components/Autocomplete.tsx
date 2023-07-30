@@ -1,4 +1,4 @@
-import { useDeferredValue, useRef, useState } from "react";
+import { useDeferredValue, useEffect, useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
 import List, { ListRef } from "./UI/List";
 import { GroupBase, OptionType } from "../types/AutocompleteTypes";
@@ -25,7 +25,7 @@ const Autocomplete = ({
   isLoading = false,
   required,
   checkbox = false,
-  options = [],
+  options,
   grouped = false,
   label = "",
   noOptionsMessage = "Нет элементов",
@@ -37,11 +37,15 @@ const Autocomplete = ({
   const inputRef = useRef<InputRef>(null);
   const optionsRef = useRef<ListRef>(null);
   const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
-  const [filteredList, setFilteredList] = useState<OptionType[]>(options);
+  const [filteredList, setFilteredList] = useState<OptionType[]>(options || []);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(
     defaultValue || null,
   );
   const deferredFilteredList = useDeferredValue(filteredList);
+
+  useEffect(() => {
+    if (options !== filteredList) setFilteredList(options || []);
+  }, [options]);
 
   return (
     <div className={cl.container}>
@@ -60,7 +64,7 @@ const Autocomplete = ({
         setSelectedOption={setSelectedOption}
         selectedOption={selectedOption}
         label={label}
-        options={options}
+        options={options || []}
         optionsRef={optionsRef}
       />
       {grouped ? (

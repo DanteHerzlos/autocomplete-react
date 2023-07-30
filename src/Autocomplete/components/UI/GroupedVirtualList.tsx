@@ -241,11 +241,14 @@ const GroupedVirtualList = forwardRef<
                   <Option
                     checkbox={checkbox}
                     option={option.el}
-                    optionRef={(element) =>
-                      (groupedOptionsRef.current[option.group_index][
-                        option.element_index
-                      ] = element)
-                    }
+                    optionRef={(element) => {
+                      const refCurrent = groupedOptionsRef.current;
+                      if (refCurrent.length <= option.group_index) {
+                        refCurrent.push([]);
+                      }
+                      refCurrent[option.group_index][option.element_index] =
+                        element;
+                    }}
                     isHovered={hoveredOption.option.label === option.el.label}
                     isSelected={
                       (selectedOption &&

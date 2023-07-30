@@ -8,10 +8,13 @@ export class Filtration {
     const newArr = [];
     for (let i = 0; i < options.length; i++) {
       if (options[i].hasOwnProperty("options")) {
-        newArr.push({
-          options: this.byString(options[i].options, filterString),
-          label: options[i].label,
-        });
+        const optionsOfGroup = this.byString(options[i].options, filterString);
+        if (optionsOfGroup.length !== 0) {
+          newArr.push({
+            options: optionsOfGroup,
+            label: options[i].label,
+          });
+        }
       } else if (options[i].label.includes(filterString)) {
         newArr.push(options[i]);
       }

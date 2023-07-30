@@ -52,7 +52,7 @@ const VirtualList = forwardRef<VirtualListRef, VirtualListProps>(
     const [hoveredOption, setHoveredOption] = useState<{
       option: OptionType;
       index: number;
-    }>({ option: options[0], index: 0 });
+    }>({ option: options[0] || {}, index: 0 });
 
     //Virtual props
     const [start, setStart] = useState(0);
