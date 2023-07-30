@@ -56,6 +56,7 @@ const Autocomplete = ({
         required={required}
         ref={inputRef}
         onChange={onChange}
+        isDefOptions={deferredFilteredList !== filteredList}
         onChangeInput={onChangeInput}
         setFilteredList={setFilteredList}
         filteredList={deferredFilteredList}

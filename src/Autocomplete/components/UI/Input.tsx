@@ -24,6 +24,7 @@ interface InputProps {
   options: OptionType[];
   label?: string;
   optionsRef: React.RefObject<ListRef>;
+  isDefOptions: boolean;
 }
 
 export interface InputRef {
@@ -48,6 +49,7 @@ const Input = forwardRef<InputRef, InputProps>(
       filteredList,
       setFilteredList,
       optionsRef,
+      isDefOptions,
     },
     ref,
   ) => {
@@ -112,11 +114,9 @@ const Input = forwardRef<InputRef, InputProps>(
     };
 
     const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      e.stopPropagation()
+      if (isDefOptions && e.key !== "Enter") return;
       const notDisabled = Filtration.byDisabled(filteredList);
-      if (!isFilteredList || notDisabled.length === 0) {
-        return;
-      }
+      if (!isFilteredList || notDisabled.length === 0) return;
       if (e.key === "ArrowUp") {
         optionsRef.current!.prevHover();
       }
@@ -124,7 +124,8 @@ const Input = forwardRef<InputRef, InputProps>(
         optionsRef.current!.nextHover();
       }
       if (e.key === "Enter") {
-        e.preventDefault()
+        e.preventDefault();
+        if (isDefOptions) return;
         selectHandler(optionsRef.current!.getHovered());
       }
     };
