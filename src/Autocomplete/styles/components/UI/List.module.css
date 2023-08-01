@@ -19,14 +19,14 @@
 }
 
 .filteredList._disable {
-  background-color: #eeeeee;
+  background-color: var(--disabled-color);
   pointer-events: none;
 }
 
 .noOptions {
   padding: 7px 14px;
   cursor: auto;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--disabled-color);
 }
 
 .group {
