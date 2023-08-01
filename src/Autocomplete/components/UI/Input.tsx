@@ -29,6 +29,7 @@ interface InputProps {
 
 export interface InputRef {
   selectOption: (option: OptionType) => void;
+  reset: () => void
 }
 
 const Input = forwardRef<InputRef, InputProps>(
@@ -58,6 +59,13 @@ const Input = forwardRef<InputRef, InputProps>(
     useImperativeHandle(ref, () => ({
       selectOption(option: OptionType) {
         selectHandler(option);
+      },
+      reset() {
+        inputRef.current!.value = "";
+        setFilteredList(options);
+        setSelectedOption(null);
+        if (onChangeInput) onChangeInput("");
+        if (onChange) onChange(null);
       },
     }));
 

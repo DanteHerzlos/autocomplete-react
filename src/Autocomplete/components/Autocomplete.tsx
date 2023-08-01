@@ -1,9 +1,20 @@
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useDeferredValue,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import cl from "../styles/components/Autocomplete.module.css";
 import List, { ListRef } from "./UI/List";
 import { GroupBase, OptionType } from "../types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 import GroupedList from "./UI/GroupedList";
+
+export interface AutocompleteRef {
+  reset: () => void;
+}
 
 interface AutocompleteProps {
   disabled?: boolean;
@@ -20,80 +31,93 @@ interface AutocompleteProps {
   groupClassName?: string;
 }
 
-const Autocomplete = ({
-  disabled = false,
-  isLoading = false,
-  required,
-  checkbox = false,
-  options,
-  grouped = false,
-  label = "",
-  noOptionsMessage = "Нет элементов",
-  groupClassName,
-  defaultValue,
-  onChange,
-  onChangeInput,
-}: AutocompleteProps) => {
-  const inputRef = useRef<InputRef>(null);
-  const optionsRef = useRef<ListRef>(null);
-  const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
-  const [filteredList, setFilteredList] = useState<OptionType[]>(options || []);
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(
-    defaultValue || null,
-  );
-  const deferredFilteredList = useDeferredValue(filteredList);
+const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
+  (
+    {
+      disabled = false,
+      isLoading = false,
+      required,
+      checkbox = false,
+      options,
+      grouped = false,
+      label = "",
+      noOptionsMessage = "Нет элементов",
+      groupClassName,
+      defaultValue,
+      onChange,
+      onChangeInput,
+    },
+    ref,
+  ) => {
+    const inputRef = useRef<InputRef>(null);
+    const optionsRef = useRef<ListRef>(null);
+    const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
+    const [filteredList, setFilteredList] = useState<OptionType[]>(
+      options || [],
+    );
+    const [selectedOption, setSelectedOption] = useState<OptionType | null>(
+      defaultValue || null,
+    );
+    const deferredFilteredList = useDeferredValue(filteredList);
 
-  useEffect(() => {
-    if (options !== filteredList) setFilteredList(options || []);
-  }, [options]);
+    useEffect(() => {
+      if (options !== filteredList) setFilteredList(options || []);
+    }, [options]);
 
-  return (
-    <div className={cl.container}>
-      <Input
-        disabled={disabled}
-        isLoading={isLoading}
-        defaultValue={defaultValue}
-        required={required}
-        ref={inputRef}
-        onChange={onChange}
-        isDefOptions={deferredFilteredList !== filteredList}
-        onChangeInput={onChangeInput}
-        setFilteredList={setFilteredList}
-        filteredList={deferredFilteredList}
-        isFilteredList={isFilteredList}
-        setIsFilteredList={setIsFilteredList}
-        setSelectedOption={setSelectedOption}
-        selectedOption={selectedOption}
-        label={label}
-        options={options || []}
-        optionsRef={optionsRef}
-      />
-      {grouped ? (
-        <GroupedList
-          checkbox={checkbox}
-          ref={optionsRef}
-          groupClassName={groupClassName || ""}
+    useImperativeHandle(ref, () => ({
+      reset() {
+        inputRef.current?.reset()
+      },
+    }));
+
+    return (
+      <div className={cl.container}>
+        <Input
+          disabled={disabled}
+          isLoading={isLoading}
+          defaultValue={defaultValue}
+          required={required}
+          ref={inputRef}
+          onChange={onChange}
           isDefOptions={deferredFilteredList !== filteredList}
-          groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
+          onChangeInput={onChangeInput}
+          setFilteredList={setFilteredList}
+          filteredList={deferredFilteredList}
+          isFilteredList={isFilteredList}
+          setIsFilteredList={setIsFilteredList}
+          setSelectedOption={setSelectedOption}
           selectedOption={selectedOption}
-          visible={isFilteredList && !isLoading}
-          noOptionMessage={noOptionsMessage}
-          inputRef={inputRef}
+          label={label}
+          options={options || []}
+          optionsRef={optionsRef}
         />
-      ) : (
-        <List
-          checkbox={checkbox}
-          ref={optionsRef}
-          isDefOptions={deferredFilteredList !== filteredList}
-          options={deferredFilteredList}
-          selectedOption={selectedOption}
-          visible={isFilteredList && !isLoading}
-          noOptionMessage={noOptionsMessage}
-          inputRef={inputRef}
-        />
-      )}
-    </div>
-  );
-};
+        {grouped ? (
+          <GroupedList
+            checkbox={checkbox}
+            ref={optionsRef}
+            groupClassName={groupClassName || ""}
+            isDefOptions={deferredFilteredList !== filteredList}
+            groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
+            selectedOption={selectedOption}
+            visible={isFilteredList && !isLoading}
+            noOptionMessage={noOptionsMessage}
+            inputRef={inputRef}
+          />
+        ) : (
+          <List
+            checkbox={checkbox}
+            ref={optionsRef}
+            isDefOptions={deferredFilteredList !== filteredList}
+            options={deferredFilteredList}
+            selectedOption={selectedOption}
+            visible={isFilteredList && !isLoading}
+            noOptionMessage={noOptionsMessage}
+            inputRef={inputRef}
+          />
+        )}
+      </div>
+    );
+  },
+);
 
 export default Autocomplete;

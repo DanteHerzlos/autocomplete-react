@@ -1,9 +1,10 @@
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import { forwardRef, useDeferredValue, useEffect, useImperativeHandle, useRef, useState } from "react";
 import cl from "../styles/components/Autocomplete.module.css";
 import { OptionType, GroupBase } from "../types/AutocompleteTypes";
 import Input, { InputRef } from "./UI/Input";
 import VirtualList, { VirtualListRef } from "./UI/VirtualList";
 import GroupedVirtualList from "./UI/GroupedVirtualList";
+import { AutocompleteRef } from "./Autocomplete";
 
 interface AutocompleteProps {
   isLoading?: boolean;
@@ -21,7 +22,7 @@ interface AutocompleteProps {
   onChangeInput?: (event: string) => void;
 }
 
-const VirtualAutocomplete = ({
+const VirtualAutocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(({
   isLoading = false,
   disabled = false,
   defaultValue,
@@ -35,7 +36,7 @@ const VirtualAutocomplete = ({
   grouped = false,
   onChange,
   onChangeInput,
-}: AutocompleteProps) => {
+}, ref) => {
   const inputRef = useRef<InputRef>(null);
   const optionsRef = useRef<VirtualListRef>(null);
   const [isFilteredList, setIsFilteredList] = useState<boolean>(false);
@@ -49,6 +50,12 @@ const VirtualAutocomplete = ({
     if (options !== filteredList) setFilteredList(options || []);
   }, [options]);
 
+  useImperativeHandle(ref, () => ({
+    reset() {
+      inputRef.current?.reset();
+    },
+  }));
+
   return (
     <div className={cl.container}>
       <Input
@@ -59,6 +66,7 @@ const VirtualAutocomplete = ({
         ref={inputRef}
         onChange={onChange}
         onChangeInput={onChangeInput}
+        isDefOptions={deferredFilteredList !== filteredList}
         setFilteredList={setFilteredList}
         filteredList={deferredFilteredList}
         isFilteredList={isFilteredList}
@@ -97,6 +105,6 @@ const VirtualAutocomplete = ({
       )}
     </div>
   );
-};
+});
 
 export default VirtualAutocomplete;
