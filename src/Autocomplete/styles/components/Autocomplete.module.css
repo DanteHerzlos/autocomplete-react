@@ -1,4 +1,12 @@
 .container {
   width: 100%;
   position: relative;
+  --default-border-color: #bfbfbf;
+  --hovered-border-color: #004974;
+  --focus-border-color: #0079c2;
+  --font-color: #444444;
+  --error-color: #e60046;
+  --disabled-color: #c9c9c9;
+  --selected-color: #e6f2f9;
+  --hovered-option-color: #f0f0f0;
 }

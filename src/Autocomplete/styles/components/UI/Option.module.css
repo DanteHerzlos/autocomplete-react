@@ -4,18 +4,19 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--font-color);
 }
 
 .option._hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--hovered-option-color);
 }
 
 .option._selected {
-  background-color: #3b82f680;
+  background-color: var(--selected-color);
 }
 
 .option._disabled {
-  color: #cccccc;
+  color: var(--disabled-color);
   pointer-events: none;
 }
 

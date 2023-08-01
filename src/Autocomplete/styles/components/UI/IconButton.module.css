@@ -8,7 +8,7 @@
   border-radius: 50%;
   outline: 0;
   border: none;
-  padding: 5px;
+  padding: 0.25rem;
   transition: 0.25s ease-in;
 }
 

@@ -9,21 +9,23 @@
   letter-spacing: 0.00938em;
   border-radius: 4px;
   outline: 1px solid rgba(0, 0, 0, 0);
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--default-border-color);
+  color: var(--font-color);
 }
 
 .input:hover {
-  border-color: rgba(0, 0, 0, 0.87);
+  border-color: var(--hovered-border-color);
 }
 
 .input:disabled {
-  background-color: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #ffffff;
+  border: 1px solid var(--disabled-color);
+  color: var(--disabled-color);
 }
 
 .input:focus {
-  border: 1px solid #2196f3;
-  outline: 1px solid #2196f3;
+  border: 1px solid var(--focus-border-color);
+  outline: 1px solid var(--focus-border-color);
 }
 
 .label {
@@ -34,17 +36,21 @@
   top: 15px;
   left: 14px;
   z-index: 2;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--font-color);
   transition: 0.14s ease-in;
   transition-property: top, font-size;
 }
 
 .input:disabled + .label {
-  background-color: rgba(0, 0, 0, 0);
+  color: var(--disabled-color);
+}
+
+.input:disabled + .close_btn_icon,
+.drop_btn_icon {
+  fill: var(--disabled-color);
 }
 
 .input:focus + .label {
-  color: #2196f3;
   top: -8px;
   left: 14px;
   font-size: 0.75rem;
@@ -61,7 +67,7 @@
 }
 
 .input._invalid {
-  border-color: red;
+  border-color: var(--error-color);
 }
 
 .close_btn_icon,
@@ -69,12 +75,26 @@
   fill: rgba(0, 0, 0, 0.5);
 }
 
+.close_btn_icon {
+  width: 1rem;
+  height: 1rem;
+}
+
 .close_btn {
   position: absolute;
-  width: 34px;
-  height: 34px;
-  top: 6px;
-  right: 36px;
+  width: 1.5rem;
+  height: 1.5rem;
+  top: 0.75rem;
+  right: 2rem;
+  z-index: 2;
+}
+
+.drop_btn {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  top: 0.5rem;
+  right: 0.25rem;
   z-index: 2;
 }
 
@@ -86,21 +106,13 @@
   display: none;
 }
 
-.drop_btn {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  top: 6px;
-  right: 4px;
-  z-index: 2;
-}
 
 .drop_btn_icon._reverse {
   transform: rotateX(0.5turn);
 }
 
 .invalid_message {
-  color: red;
+  color: var(--error-color);
   font-size: 0.75rem;
   position: absolute;
   bottom: -1rem;
