@@ -67,6 +67,7 @@ const Input = forwardRef<InputRef, InputProps>(
     useImperativeHandle(ref, () => ({
       selectOption(option: OptionType) {
         selectHandler(option);
+        setFilteredList(options);
       },
       reset() {
         inputRef.current!.value = "";
@@ -81,6 +82,7 @@ const Input = forwardRef<InputRef, InputProps>(
     useEffect(() => {
       if (defaultValue) {
         selectHandler(defaultValue);
+        setFilteredList(options);
       }
     }, [defaultValue]);
 
