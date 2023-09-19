@@ -17,6 +17,7 @@ export interface AutocompleteRef {
 }
 
 interface AutocompleteProps {
+  readonly?: boolean;
   disabled?: boolean;
   isLoading?: boolean;
   defaultValue?: OptionType;
@@ -34,6 +35,7 @@ interface AutocompleteProps {
 const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
   (
     {
+      readonly = false,
       disabled = false,
       isLoading = false,
       required,
@@ -66,13 +68,14 @@ const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
 
     useImperativeHandle(ref, () => ({
       reset() {
-        inputRef.current?.reset()
+        inputRef.current?.reset();
       },
     }));
 
     return (
       <div className={cl.container}>
         <Input
+          readonly={readonly}
           disabled={disabled}
           isLoading={isLoading}
           defaultValue={defaultValue}

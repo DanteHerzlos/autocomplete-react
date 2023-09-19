@@ -1,5 +1,11 @@
 import { OptionType } from "../../types/AutocompleteTypes";
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import IconButton from "./IconButton";
 import CloseIcon from "../icons/CloseIcon";
 import ArrowDropDownIcon from "../icons/ArrowDropDownIcon";
@@ -9,6 +15,7 @@ import { Filtration } from "../../utils/Filtration";
 import CircularLoader from "./CircularLoader";
 
 interface InputProps {
+  readonly?: boolean;
   disabled?: boolean;
   isLoading?: boolean;
   defaultValue?: OptionType;
@@ -29,12 +36,13 @@ interface InputProps {
 
 export interface InputRef {
   selectOption: (option: OptionType) => void;
-  reset: () => void
+  reset: () => void;
 }
 
 const Input = forwardRef<InputRef, InputProps>(
   (
     {
+      readonly = false,
       disabled = false,
       isLoading = false,
       defaultValue,
@@ -68,6 +76,11 @@ const Input = forwardRef<InputRef, InputProps>(
         if (onChange) onChange(null);
       },
     }));
+
+    // TODO change
+    useEffect(() => {
+      setSelectedOption(defaultValue || null);
+    }, [defaultValue]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (invalid) setInvalid(false);
@@ -138,9 +151,14 @@ const Input = forwardRef<InputRef, InputProps>(
       }
     };
 
+    function onFocusHandler() {
+      if (!readonly) setIsFilteredList(true);
+    }
+
     return (
       <>
         <input
+          readOnly={readonly}
           disabled={disabled || isLoading}
           defaultValue={defaultValue ? defaultValue.label : ""}
           onInvalid={(e) => {
@@ -149,7 +167,7 @@ const Input = forwardRef<InputRef, InputProps>(
           }}
           required={required}
           onKeyDown={(e) => keyDownHandler(e)}
-          onFocus={() => setIsFilteredList(true)}
+          onFocus={onFocusHandler}
           onBlur={blurHandler}
           ref={inputRef}
           placeholder="placeholder"
@@ -163,7 +181,7 @@ const Input = forwardRef<InputRef, InputProps>(
         {isLoading && (
           <CircularLoader style={{ width: "2rem" }} className={cl.loader} />
         )}
-        {!isLoading && (
+        {!isLoading && !readonly && (
           <IconButton
             disabled={disabled || isLoading}
             onMouseDown={(e) => e.preventDefault()}
@@ -173,20 +191,22 @@ const Input = forwardRef<InputRef, InputProps>(
             <CloseIcon className={cl.close_btn_icon} />
           </IconButton>
         )}
-        <IconButton
-          disabled={disabled || isLoading}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={dropDownHandler}
-          className={cl.drop_btn}
-        >
-          <ArrowDropDownIcon
-            className={
-              isFilteredList
-                ? [cl.drop_btn_icon, cl._reverse].join(" ")
-                : cl.drop_btn_icon
-            }
-          />
-        </IconButton>
+        {!readonly && (
+          <IconButton
+            disabled={disabled || isLoading}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={dropDownHandler}
+            className={cl.drop_btn}
+          >
+            <ArrowDropDownIcon
+              className={
+                isFilteredList
+                  ? [cl.drop_btn_icon, cl._reverse].join(" ")
+                  : cl.drop_btn_icon
+              }
+            />
+          </IconButton>
+        )}
         {invalid && (
           <span className={cl.invalid_message}>
             {inputRef.current?.validationMessage}
