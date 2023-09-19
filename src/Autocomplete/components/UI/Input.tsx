@@ -112,8 +112,9 @@ const Input = forwardRef<InputRef, InputProps>(
       } else {
         inputRef.current!.value = selectedOption.label;
         if (onChangeInput) onChangeInput(selectedOption.label);
-        const newList = Filtration.byString(options, selectedOption.label);
-        setFilteredList(newList);
+        setFilteredList(options);
+        // const newList = Filtration.byString(options, selectedOption.label);
+        // setFilteredList(newList);
       }
       setIsFilteredList(false);
     };
