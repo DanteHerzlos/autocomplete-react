@@ -69,6 +69,9 @@ const VirtualAutocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
       reset() {
         inputRef.current?.reset();
       },
+      selectOption(option: OptionType) {
+        inputRef.current?.selectOption(option);
+      },
     }));
 
     return (

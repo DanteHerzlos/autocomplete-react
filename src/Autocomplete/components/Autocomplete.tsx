@@ -14,6 +14,7 @@ import GroupedList from "./UI/GroupedList";
 
 export interface AutocompleteRef {
   reset: () => void;
+  selectOption: (option: OptionType) => void;
 }
 
 interface AutocompleteProps {
@@ -69,6 +70,9 @@ const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
     useImperativeHandle(ref, () => ({
       reset() {
         inputRef.current?.reset();
+      },
+      selectOption(option: OptionType) {
+        inputRef.current?.selectOption(option);
       },
     }));
 
