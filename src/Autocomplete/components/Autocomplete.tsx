@@ -94,30 +94,32 @@ const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
           options={options || []}
           optionsRef={optionsRef}
         />
-        {grouped ? (
-          <GroupedList
-            checkbox={checkbox}
-            ref={optionsRef}
-            groupClassName={groupClassName || ""}
-            isDefOptions={deferredFilteredList !== filteredList}
-            groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
-            selectedOption={selectedOption}
-            visible={isFilteredList && !isLoading}
-            noOptionMessage={noOptionsMessage}
-            inputRef={inputRef}
-          />
-        ) : (
-          <List
-            checkbox={checkbox}
-            ref={optionsRef}
-            isDefOptions={deferredFilteredList !== filteredList}
-            options={deferredFilteredList}
-            selectedOption={selectedOption}
-            visible={isFilteredList && !isLoading}
-            noOptionMessage={noOptionsMessage}
-            inputRef={inputRef}
-          />
-        )}
+
+        {!readonly &&
+          (grouped ? (
+            <GroupedList
+              checkbox={checkbox}
+              ref={optionsRef}
+              groupClassName={groupClassName || ""}
+              isDefOptions={deferredFilteredList !== filteredList}
+              groupedOptions={deferredFilteredList as GroupBase<OptionType>[]}
+              selectedOption={selectedOption}
+              visible={isFilteredList && !isLoading}
+              noOptionMessage={noOptionsMessage}
+              inputRef={inputRef}
+            />
+          ) : (
+            <List
+              checkbox={checkbox}
+              ref={optionsRef}
+              isDefOptions={deferredFilteredList !== filteredList}
+              options={deferredFilteredList}
+              selectedOption={selectedOption}
+              visible={isFilteredList && !isLoading}
+              noOptionMessage={noOptionsMessage}
+              inputRef={inputRef}
+            />
+          ))}
       </div>
     );
   },
