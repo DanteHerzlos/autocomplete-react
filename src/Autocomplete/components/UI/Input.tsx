@@ -79,7 +79,9 @@ const Input = forwardRef<InputRef, InputProps>(
 
     // TODO change
     useEffect(() => {
-      setSelectedOption(defaultValue || null);
+      if (defaultValue) {
+        selectHandler(defaultValue);
+      }
     }, [defaultValue]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +100,8 @@ const Input = forwardRef<InputRef, InputProps>(
       inputRef.current!.value = el.label;
       setSelectedOption(el);
       setIsFilteredList(false);
+      const newList = Filtration.byString(options, el.label);
+      setFilteredList(newList);
     };
 
     const blurHandler = () => {
