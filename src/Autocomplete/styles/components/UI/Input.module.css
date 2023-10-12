@@ -13,6 +13,10 @@
   color: var(--font-color);
 }
 
+.input:read-only{
+  padding-right: 14px;
+}
+
 .input:hover {
   border-color: var(--hovered-border-color);
 }
