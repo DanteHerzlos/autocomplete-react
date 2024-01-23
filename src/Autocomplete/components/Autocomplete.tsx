@@ -27,6 +27,7 @@ interface AutocompleteProps {
   options?: OptionType[] | GroupBase<OptionType>[];
   label?: string;
   grouped?: boolean;
+  caseSensetive?: boolean
   noOptionsMessage?: string;
   onChange?: (event: OptionType | null) => void;
   onChangeInput?: (event: string) => void;
@@ -43,6 +44,7 @@ const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
       checkbox = false,
       options,
       grouped = false,
+      caseSensetive = false,
       label = "",
       noOptionsMessage = "Нет элементов",
       groupClassName,
@@ -97,6 +99,7 @@ const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
           label={label}
           options={options || []}
           optionsRef={optionsRef}
+          caseSensetive={caseSensetive}
         />
 
         {!readonly &&

@@ -24,6 +24,7 @@ interface AutocompleteProps {
   label?: string;
   noOptionsMessage?: string;
   optionHi?: number;
+  caseSensetive?: boolean;
   grouped?: boolean;
   groupClassName?: string;
   onChange?: (event: OptionType | null) => void;
@@ -45,6 +46,7 @@ const VirtualAutocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
       noOptionsMessage = "Нет элементов",
       groupClassName,
       grouped = false,
+      caseSensetive = false,
       onChange,
       onChangeInput,
     },
@@ -95,6 +97,7 @@ const VirtualAutocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
           label={label}
           options={options || []}
           optionsRef={optionsRef}
+          caseSensetive={caseSensetive}
         />
         {!readonly &&
           (grouped ? (

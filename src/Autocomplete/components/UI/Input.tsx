@@ -32,6 +32,7 @@ interface InputProps {
   label?: string;
   optionsRef: React.RefObject<ListRef>;
   isDefOptions: boolean;
+  caseSensetive: boolean;
 }
 
 export interface InputRef {
@@ -45,6 +46,7 @@ const Input = forwardRef<InputRef, InputProps>(
       readonly = false,
       disabled = false,
       isLoading = false,
+      caseSensetive,
       defaultValue,
       required,
       options,
@@ -90,7 +92,11 @@ const Input = forwardRef<InputRef, InputProps>(
       if (invalid) setInvalid(false);
       if (onChangeInput) onChangeInput(e.currentTarget.value);
       setIsFilteredList(true);
-      const newList = Filtration.byString(options, e.currentTarget.value);
+      const newList = Filtration.byString(
+        options,
+        e.currentTarget.value,
+        caseSensetive,
+      );
       setFilteredList(newList);
     };
 
@@ -102,7 +108,7 @@ const Input = forwardRef<InputRef, InputProps>(
       inputRef.current!.value = el.label;
       setSelectedOption(el);
       setIsFilteredList(false);
-      const newList = Filtration.byString(options, el.label);
+      const newList = Filtration.byString(options, el.label, caseSensetive);
       setFilteredList(newList);
     };
 
